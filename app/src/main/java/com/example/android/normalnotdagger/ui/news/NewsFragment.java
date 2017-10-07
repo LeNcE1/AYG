@@ -31,33 +31,47 @@ public class NewsFragment extends Fragment implements NewsMVP{
     NewsAdapter newsAdapter;
     NewsPresentr pr;
     SharedPreferences user;
-
-
+    String pod = null;
+    String m = null;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         recyclerView = (RecyclerView) inflater.inflate(
                 R.layout.recycler_view, container, false);
-
         user = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
+        pr = new NewsPresentr(this, user);
 
-
-        posts = new ArrayList<>();
-
-        pr = new NewsPresentr(this);
-        pr.loadNews("1",0);
-
+        Bundle bundle = getArguments();
+        if(bundle != null){
+            Log.e("Bundle", "not NULL");
+            pod = bundle.getString("pod");
+            m = bundle.getString("my");
+            if(m != null){
+                recyclerView.setAdapter(newsAdapter);
+                newsAdapter = new NewsAdapter(posts, pr, user, pod, m);
+                recyclerView.setAdapter(newsAdapter);
+                pr.loadNewsMy(user.getString("id","error"),0);
+            }
+        }
+        if(pod == null) {
+            if(m == null) {
+                Log.e("pod", "NULL");
+                pr.loadNews(user.getString("id", "1"), 0);
+            }
+        }
+        else{
+            Log.e("pod", " not NULL" + bundle.getString("pod"));
+            pr.loadNewspod(user.getString("id", "1"), 0);
+        }
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(newsAdapter);
-        newsAdapter = new NewsAdapter(posts, pr, user);
+        newsAdapter = new NewsAdapter(posts, pr, user, pod, m);
         recyclerView.setAdapter(newsAdapter);
-
         return recyclerView;
     }
 
     @Override
     public void showNews(List<News> posts) {
-        Log.e("testPresentr", posts.get(0).getText());
         newsAdapter.addPosts(posts);
         recyclerView.getAdapter().notifyDataSetChanged();
     }
@@ -118,6 +132,12 @@ public class NewsFragment extends Fragment implements NewsMVP{
                 .commit();
 
     }
+
+    @Override
+    public void showDeletePost(String status) {
+        Toast.makeText(getActivity(), status, Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     public void startFullNews(News post) {
         FullNewsFragment youFragment = new FullNewsFragment();
@@ -128,8 +148,11 @@ public class NewsFragment extends Fragment implements NewsMVP{
         bundle.putString("text", post.getText());
         bundle.putString("data", post.getDate());
         bundle.putString("avtor", post.getUserLogin());
+        Log.e("News", "avtor "+post.getUserId());
+        bundle.putString("avtor_id", post.getUserId().toString());
         bundle.putString("view", post.getViews());
         bundle.putString("reyting", post.getMark().toString());
+        bundle.putString("like",post.getUserMark().toString());
         List<String> imags = new ArrayList<>();
         for(int i = 0; i < post.getImages().size(); i++ ){
             imags.add(post.getImages().get(i).toString());

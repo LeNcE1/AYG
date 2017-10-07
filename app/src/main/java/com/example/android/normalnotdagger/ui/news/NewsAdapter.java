@@ -1,7 +1,9 @@
 package com.example.android.normalnotdagger.ui.news;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
@@ -29,12 +31,15 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.RibotViewHolde
     NewsPresentr pr;
     SharedPreferences user;
     int pag =20;
+    String pod;
+    String m;
 
-    public NewsAdapter(List<News> posts, NewsPresentr pr,SharedPreferences user) {
-
+    public NewsAdapter(List<News> posts, NewsPresentr pr,SharedPreferences user, String pod, String m) {
+        this.pod = pod;
         this.mRibots = posts;
         this.pr = pr;
         this.user = user;
+        this.m = m;
     }
 
     public void addPosts(List<News> ribots) {
@@ -48,33 +53,47 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.RibotViewHolde
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_news, parent, false);
 
-
         return new RibotViewHolder(itemView);
     }
 
+    int doposition = 0;
     @Override
-    public void onBindViewHolder(final RibotViewHolder holder, int position) {
+    public void onBindViewHolder(final RibotViewHolder holder, final int position) {
         if(position == (pag-6)){
-            pr.loadNews("1",pag);
+            if(pod == null) {
+                if(m != null){
+                    Log.e("My post", "my post");
+                    holder.delete.setVisibility(View.VISIBLE);
+                    pr.loadNewsMy(user.getString("id", "1"), pag);
+                }
+                else {
+                    pr.loadNews(user.getString("id", "1"), pag);
+                }
+            }
+            else{
+                pr.loadNewspod(user.getString("id", "1"), pag);
+            }
             pag+=20;
+        }
+        else{
+            if(m != null){
+                Log.e("My post", "my post");
+                holder.delete.setVisibility(View.VISIBLE);
+                holder.delete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        pr.deletePost(mRibots.get(position).getPostId());
+
+                    }
+                });
+            }
         }
 
 
+
+
         final News example = mRibots.get(position);
-        //Log.e("ExampleList", "id=" + example.getId() + " url= " + example.getAvatarUrl());
-
-//        if (example.getAvatarUrl() != null)
-//            if (!example.getAvatarUrl().isEmpty()) {
-//                Picasso.with(holder.itemView.getContext())
-//                        .load(example.getAvatarUrl())
-//                        .placeholder(R.drawable.ic_account_circle_black_24dp)
-//                        .fit()
-//                        .centerCrop()
-//                        .into(holder.avatar);
-//            }
-
-
-
         holder.dateTextView.setText(example.getDate());
         if(example.getUserId() == 0) {
             String adm_name = "Администратор";
@@ -91,13 +110,35 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.RibotViewHolde
         holder.subTextView.setText(example.getShort());
         holder.viewsTextView.setText(example.getViews());
         holder.ratingTextView.setText(example.getMark().toString());
-        if(!user.getString("id","error").equals("error")){
-            pr.addView(user.getString("id", "1"), example.getPostId().toString());
-        }
+
+
+            doposition = position;
+            if (!user.getString("id", "error").equals("error")) {
+               // Log.e("USerMark", example.getUserMark() + " " + position);
+                switch (mRibots.get(position).getUserMark()) {
+                    case 1: {
+                        holder.like.setColorFilter(Color.RED);
+                        holder.deslike.setColorFilter(Color.parseColor("#FFC107"));
+                        break;
+                    }
+                    case -1: {
+                        holder.deslike.setColorFilter(Color.RED);
+                        holder.like.setColorFilter(Color.parseColor("#FFC107"));
+                        break;
+                    }
+                    case 0:{
+                        holder.deslike.setColorFilter(Color.parseColor("#FFC107"));
+                        holder.like.setColorFilter(Color.parseColor("#FFC107"));
+                        break;
+                    }
+                }
+                pr.addView(user.getString("id", "1"), example.getPostId().toString());
+            }
 
         holder.autorTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(example.getUserId() != 0)
                 pr.startUserInfo(example.getUserId().toString());
             }
         });
@@ -106,7 +147,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.RibotViewHolde
             @Override
             public void onClick(View view) {
                 pr.startComments(example.getPostId().toString());
-
                 //тут комменты
             }
         });
@@ -115,10 +155,36 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.RibotViewHolde
             @Override
             public void onClick(View view) {
                 if(!user.getString("id","error").equals("error")) {
-                    pr.addLike(user.getString("id", "1"), example.getPostId().toString(), 1);
-                    example.setViews((example.getMark() + 1) + "");
-                    holder.ratingTextView.setText(example.getMark().toString());
-                    //лайк
+                    switch (mRibots.get(position).getUserMark()){
+                        case 0:{
+                            pr.addLike(user.getString("id", "1"), example.getPostId().toString(), 1);
+                            mRibots.get(position).setMark(example.getMark() + 1);
+                            holder.ratingTextView.setText(mRibots.get(position).getMark().toString());
+                            holder.like.setColorFilter(Color.RED);
+                            holder.deslike.setColorFilter(Color.parseColor("#FFC107"));
+                            mRibots.get(position).setUserMark(1);
+                            break;
+                        }
+                        case 1:{
+                            pr.addLike(user.getString("id", "1"), example.getPostId().toString(),0);
+                            mRibots.get(position).setMark(mRibots.get(position).getMark()-1);
+                            mRibots.get(position).setUserMark(0);
+                            holder.ratingTextView.setText(mRibots.get(position).getMark().toString());
+                            holder.like.setColorFilter(Color.parseColor("#FFC107"));
+                            holder.deslike.setColorFilter(Color.parseColor("#FFC107"));
+                            break;
+
+                        }
+                        case -1:{
+                            pr.addLike(user.getString("id", "1"), example.getPostId().toString(), 1);
+                            mRibots.get(position).setMark(mRibots.get(position).getMark() + 2);
+                            holder.ratingTextView.setText(mRibots.get(position).getMark().toString());
+                            mRibots.get(position).setUserMark(1);
+                            holder.deslike.setColorFilter(Color.parseColor("#FFC107"));
+                            holder.like.setColorFilter(Color.RED);
+                            break;
+                        }
+                    }
                 }
             }
         });
@@ -127,10 +193,33 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.RibotViewHolde
             @Override
             public void onClick(View view) {
                 if(!user.getString("id","error").equals("error")) {
-                    pr.addLike(user.getString("id", "1"), example.getPostId().toString(), -1);
-                    example.setViews((example.getMark() + 1) + "");
-                    holder.ratingTextView.setText(example.getMark().toString());
-                    //лайк
+                    switch (mRibots.get(position).getUserMark()){
+                        case 0:{
+                            pr.addLike(user.getString("id", "1"), example.getPostId().toString(), -1);
+                            mRibots.get(position).setMark(mRibots.get(position).getMark() - 1);
+                            mRibots.get(position).setUserMark(-1);
+                            holder.ratingTextView.setText(mRibots.get(position).getMark().toString());
+                            holder.deslike.setColorFilter(Color.RED);
+                            break;
+                        }
+                        case 1:{
+                            pr.addLike(user.getString("id", "1"), example.getPostId().toString(), -1);
+                            mRibots.get(position).setMark(mRibots.get(position).getMark() - 2);
+                            holder.ratingTextView.setText(mRibots.get(position).getMark().toString());
+                            holder.like.setColorFilter(Color.parseColor("#FFC107"));
+                            holder.deslike.setColorFilter(Color.RED);
+                            mRibots.get(position).setUserMark(-1);
+                        }
+                        case -1:{
+                            pr.addLike(user.getString("id", "1"), example.getPostId().toString(),0);
+                            mRibots.get(position).setMark(mRibots.get(position).getMark()+1);
+                            holder.ratingTextView.setText(mRibots.get(position).getMark().toString());
+                            mRibots.get(position).setUserMark(0);
+                            holder.like.setColorFilter(Color.parseColor("#FFC107"));
+                            holder.deslike.setColorFilter(Color.parseColor("#FFC107"));
+                            break;
+                        }
+                    }
                 }
                 //код для дизлайка
             }
@@ -140,63 +229,10 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.RibotViewHolde
             @Override
             public void onClick(View v) {
                 pr.startFullNews(example);
-
-//                Log.e("image","imag: "+example.getImages());
-//
-//
-//                // при онклике на имя автора сробатывает вот этот кусок кода
-//                pr.startUserInfo(example.getUserId().toString());
-//
-//                // при нажатии на коменты выполнить этот код
-//                //pr.startComments(example.getPostId().toString());
-//
-//
-//
-//
-//                //проследить нажатия на лайк или дизлайк, в соответствии с параметром передать 1 или -1
-//                if(!user.getString("id","error").equals("error")){
-//                    pr.addLike(user.getString("id", "1"),example.getPostId().toString(),1);
-//                    //example.setViews((example.getMark()+1)+"");
-//                }
-//                else{
-//                    //заблочить кнопки лайка
-//                }
-
-
-//                itemClickAdapter(v.getContext(), holder.getAdapterPosition());
-//                Log.e("click", "click id= "+ example.getPostId());
-
             }
         });
     }
 
-    public void itemClickAdapter(Context context, int position) {
-        //код для перехода в полную новость
-
-
-//        Example example = mRibots.get(position);
-//        Intent intent = new Intent(context, UserActivity.class);
-//
-//        intent.putExtra("Id", example.getId());
-//        if (example.getAvatarUrl() == null) {
-//            intent.putExtra("AvatarUrl", "");
-//        } else {
-//            intent.putExtra("AvatarUrl", example.getAvatarUrl());
-//        }
-//        intent.putExtra("FirstName", example.getFirstName());
-//        intent.putExtra("LastName", example.getLastName());
-//        intent.putExtra("Email", example.getEmail());
-//
-//        context.startActivity(intent);
-
-
-
-
-
-
-
-
-    }
 
     @Override
     public int getItemCount() {
@@ -227,6 +263,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.RibotViewHolde
         ImageView like;
         @BindView(R.id.deslike)
         ImageView deslike;
+        @BindView(R.id.delete)
+        ImageView delete;
+
 
 
         public RibotViewHolder(View itemView) {

@@ -38,6 +38,7 @@ public class UserWallFragment extends Fragment implements UserWallMVP{
     Button message;
     @BindView(R.id.podpiska)
     Button podpiska;
+    UserModel userModel;
 
 
 
@@ -48,7 +49,7 @@ public class UserWallFragment extends Fragment implements UserWallMVP{
         user = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
         ButterKnife.bind(this, view);
         presentr = new UserWallPresentr(this);
-        Bundle bundle = getArguments();
+        final Bundle bundle = getArguments();
         if(bundle == null){
             Toast.makeText(getActivity(),"Пользователь не найден", Toast.LENGTH_LONG).show();
         }
@@ -68,12 +69,10 @@ public class UserWallFragment extends Fragment implements UserWallMVP{
         podpiska.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Toast.makeText(getActivity(),"Подписаться на обновления to do", Toast.LENGTH_LONG).show();
+                presentr.addPod(user.getString("id", "error"),bundle.getString("avtor_id"));
+               // Toast.makeText(getActivity(),"Подписаться на обновления to do", Toast.LENGTH_LONG).show();
             }
         });
-
-
 
         return view;
     }

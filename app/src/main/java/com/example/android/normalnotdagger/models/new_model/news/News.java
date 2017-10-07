@@ -1,9 +1,7 @@
 package com.example.android.normalnotdagger.models.new_model.news;
-
+import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
-import java.util.List;
 
 public class News {
 
@@ -37,6 +35,9 @@ public class News {
     @SerializedName("mark")
     @Expose
     private Integer mark;
+    @SerializedName("user_mark")
+    @Expose
+    private Integer userMark;
 
     public Integer getPostId() {
         return postId;
@@ -116,6 +117,14 @@ public class News {
 
     public void setMark(Integer mark) {
         this.mark = mark;
+    }
+
+    public Integer getUserMark() {
+        return userMark;
+    }
+
+    public void setUserMark(Integer userMark) {
+        this.userMark = userMark;
     }
 
 }

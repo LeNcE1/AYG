@@ -2,8 +2,10 @@ package com.example.android.normalnotdagger;
 
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -14,10 +16,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
+import com.example.android.normalnotdagger.api.MessageServise;
+import com.example.android.normalnotdagger.ui.history.IHistoryFragment;
 import com.example.android.normalnotdagger.ui.map.BlankFragment;
 import com.example.android.normalnotdagger.ui.map.MapFragment;
+import com.example.android.normalnotdagger.ui.message.list_dialog.ImessageFragment;
 import com.example.android.normalnotdagger.ui.news.InewsFragment;
 import com.example.android.normalnotdagger.ui.cread_news.CreadNewsFragment;
 import com.example.android.normalnotdagger.ui.user_info.UserFragment;
@@ -25,11 +29,14 @@ import com.example.android.normalnotdagger.ui.user_info.UserFragment;
 
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, MainMVP {
 
 
     SharedPreferences user;
 
+
+
+    // Binder given to clients
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +44,13 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         user = getSharedPreferences("user", Context.MODE_PRIVATE);
 
+        Intent intent = new Intent(MainActivity.this, MessageServise.class);
+        startService(intent);
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -55,8 +67,12 @@ public class MainActivity extends AppCompatActivity
                 .commit();
 
 
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+
 
         Log.e("Menu", "Cread");
     }
@@ -64,10 +80,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         Log.e("Menu", "onBackPressed");
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+
             super.onBackPressed();
         }
     }
@@ -94,6 +112,7 @@ public class MainActivity extends AppCompatActivity
             return true;
         }
 
+
         return super.onOptionsItemSelected(item);
     }
     boolean marker = false;
@@ -118,6 +137,8 @@ public class MainActivity extends AppCompatActivity
                     .replace(R.id.content, youFragment)
                     .addToBackStack("myStack")
                     .commit();
+//            item.setChecked(true);// Выводим выбранный пункт в заголовке
+//            setTitle(item.getTitle());
         } else if (id == R.id.nav_gallery) {
             if(marker){clear();}
             UserFragment youFragment = new UserFragment();
@@ -126,6 +147,8 @@ public class MainActivity extends AppCompatActivity
                     .replace(R.id.content, youFragment)
                     .addToBackStack("myStack")
                     .commit();
+//            item.setChecked(true);// Выводим выбранный пункт в заголовке
+//            setTitle(item.getTitle());
         } else if (id == R.id.nav_slideshow) {
             if(marker){clear();}
             CreadNewsFragment youFragment = new CreadNewsFragment();
@@ -134,6 +157,8 @@ public class MainActivity extends AppCompatActivity
                     .replace(R.id.content, youFragment)
                     .addToBackStack("myStack")
                     .commit();
+//            item.setChecked(true);// Выводим выбранный пункт в заголовке
+//            setTitle(item.getTitle());
 
         } else if (id == R.id.nav_manage) {
             marker = true;
@@ -147,13 +172,52 @@ public class MainActivity extends AppCompatActivity
             }
             android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.content, fragment).commit();
+//            item.setChecked(true);// Выводим выбранный пункт в заголовке
+//            setTitle(item.getTitle());
 
         }
-//        else if (id == R.id.nav_share) {
-//
-//        } else if (id == R.id.nav_send) {
-//
-//        }
+        else if (id == R.id.nav_history) {
+            if (marker) {
+                clear();
+            }
+            IHistoryFragment youFragment = new IHistoryFragment();
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction()          // получаем экземпляр FragmentTransaction
+                    .replace(R.id.content, youFragment)
+                    .addToBackStack("myStack")
+                    .commit();
+//            item.setChecked(true);// Выводим выбранный пункт в заголовке
+//            setTitle(item.getTitle());
+        }
+        else if(id == R.id.nav_my_lent){
+            if(marker){clear();}
+            InewsFragment youFragment = new InewsFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("pod", "podpiski");
+            youFragment.setArguments(bundle);
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction()          // получаем экземпляр FragmentTransaction
+                    .replace(R.id.content, youFragment)
+                    .addToBackStack("myStack")
+                    .commit();
+
+        }
+        else if(id == R.id.nav_message){
+            if (marker) {
+                clear();
+            }
+            ImessageFragment youFragment = new ImessageFragment();
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction()          // получаем экземпляр FragmentTransaction
+                    .replace(R.id.content, youFragment)
+                    .addToBackStack("myStack")
+                    .commit();
+        }
+        item.setChecked(true);// Выводим выбранный пункт в заголовке
+        setTitle(item.getTitle());
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayShowHomeEnabled(true);
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -171,5 +235,10 @@ public class MainActivity extends AppCompatActivity
         }
         android.support.v4.app.FragmentManager fragmentManager1 = getSupportFragmentManager();
         fragmentManager1.beginTransaction().replace(R.id.content, fragment).commit();
+    }
+
+    @Override
+    public void showPush(int count) {
+        Log.e("Servise", "New Message");
     }
 }

@@ -20,16 +20,7 @@
 
         />
 
-    <Button
-        android:id="@+id/regButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:background="@drawable/button_background"
-        android:text="зарегистрироваться"
-        android:textColor="@color/white" />
+
 
     <ScrollView
 
@@ -123,6 +114,16 @@
 
         </LinearLayout>
     </ScrollView>
-
+    <Button
+        android:id="@+id/regButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@drawable/button_background"
+        android:text="зарегистрироваться"
+        android:clickable="true"
+        android:textColor="@color/white" />
 
 </RelativeLayout>

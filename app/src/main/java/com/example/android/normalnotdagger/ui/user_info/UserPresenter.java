@@ -23,6 +23,7 @@ public class UserPresenter {
         App.getApi().getUserInfo(user.getString("id","error")).enqueue(new Callback<UserModel>() {
             @Override
             public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+
                 mvp.showInfo(response.body().getName(),
                         response.body().getFamily(),
                         response.body().getCity(),

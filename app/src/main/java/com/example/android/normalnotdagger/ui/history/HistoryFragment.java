@@ -4,38 +4,82 @@ package com.example.android.normalnotdagger.ui.history;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.android.normalnotdagger.R;
+import com.example.android.normalnotdagger.models.new_model.categ_model.Category;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class HistoryFragment extends Fragment implements HistoryMVP{
-    View view;
+    RecyclerView recyclerView;
+    List<Category> list = new ArrayList<>();
+    HistoryPresentr pr;
+    HistoryAdapter adapter;
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.comennts_list, container, false);
+        recyclerView = (RecyclerView) inflater.inflate(
+                R.layout.recycler_view, container, false);
 
-        ListView lvMain = (ListView) view.findViewById(R.id.lvMain);
 
-        return view;
+
+//        ActionBar toolbar = ((AppCompatActivity)getActivity()).getSupportActionBar();
+//        toolbar.setDisplayHomeAsUpEnabled(true);
+
+
+
+        Log.e("Log",""+((AppCompatActivity)getActivity()).getSupportActionBar().getDisplayOptions());
+
+        Bundle bundle = getArguments();
+        if(bundle!=null){
+            pr = new HistoryPresentr(this);
+            pr.loadingCateg(Integer.valueOf(bundle.getString("id")));
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            recyclerView.setAdapter(adapter);
+            adapter = new HistoryAdapter(list, pr, this);
+            recyclerView.setAdapter(adapter);
+        }
+        else {
+            pr = new HistoryPresentr(this);
+            pr.loadingCateg(0);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            recyclerView.setAdapter(adapter);
+            adapter = new HistoryAdapter(list, pr, this);
+            recyclerView.setAdapter(adapter);
+        }
+        return recyclerView;
     }
 
+
+
     @Override
-    public void showCateg(ArrayList<String> categName, ArrayList<String> id) {
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-               R.layout.hisory_item, categName);
+    public void showCateg(List<Category> list) {
+        adapter = new HistoryAdapter(list, pr, this);
+        recyclerView.setAdapter(adapter);
+        recyclerView.getAdapter().notifyDataSetChanged();
 
     }
 
     @Override
     public void showError(String error) {
-
+        Log.e("Error", error);
     }
 
     @Override
@@ -46,5 +90,33 @@ public class HistoryFragment extends Fragment implements HistoryMVP{
     @Override
     public void stopProgressBar() {
 
+    }
+
+    @Override
+    public void cardsFinish(boolean mark, int id) {
+        if(mark){
+            Log.e("Log", "start " + id);
+        }
+        else {
+            Log.e("Log", "stop");
+        }
+    }
+
+    @Override
+    public void cardsStart(int id) {
+        pr.carsIsEmpty(id);
+    }
+
+    @Override
+    public void creadList(int id) {
+        HistoryFragment youFragment = new HistoryFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("id", id+"");
+        youFragment.setArguments(bundle);
+        android.app.FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()          // получаем экземпляр FragmentTransaction
+                .replace(R.id.news_list, youFragment)
+                .addToBackStack("myStack")
+                .commit();
     }
 }
