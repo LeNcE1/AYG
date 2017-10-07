@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -18,13 +17,12 @@ import android.widget.Toast;
 
 import com.example.android.normalnotdagger.R;
 import com.example.android.normalnotdagger.ui.login.LoginFragment;
-import com.example.android.normalnotdagger.ui.news.InewsFragment;
 import com.example.android.normalnotdagger.ui.news.NewsFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class UserFragment extends Fragment implements UserMVP{
+public class UserFragment extends Fragment implements UserMVP {
     SharedPreferences user;
     View view;
     UserPresenter userPresenter;
@@ -45,10 +43,10 @@ public class UserFragment extends Fragment implements UserMVP{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         user = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
         view = inflater.inflate(R.layout.user_info, container, false);
-        Log.e("id", "id = "+user.getString("id","error"));
+        Log.e("id", "id = " + user.getString("id", "error"));
         ButterKnife.bind(this, view);
-        if(!user.getString("id","error").equals("error")){
-            userPresenter = new UserPresenter(this,user);
+        if (!user.getString("id", "error").equals("error")) {
+            userPresenter = new UserPresenter(this, user);
             userPresenter.loadInfo();
             ButterKnife.bind(this, view);
             exit.setOnClickListener(new View.OnClickListener() {
@@ -66,8 +64,7 @@ public class UserFragment extends Fragment implements UserMVP{
 
                 }
             });
-        }
-        else{
+        } else {
             LoginFragment youFragment = new LoginFragment();
             FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction()          // получаем экземпляр FragmentTransaction
@@ -77,6 +74,7 @@ public class UserFragment extends Fragment implements UserMVP{
             //start логин фрагмент
         }
 
+        // TODO: 07.10.2017 поставить проверку 
         NewsFragment youFragment = new NewsFragment();
         Bundle bundle1 = new Bundle();
         bundle1.putString("my", "123");
@@ -91,10 +89,10 @@ public class UserFragment extends Fragment implements UserMVP{
 
     @Override
     public void showInfo(String name, String family, String city, String tel, String countPodpis) {
-        this.name.setText(name+" "+family);
-        this.city.setText("Город: "+city);
-        this.tel.setText("Телефон: "+tel);
-        this.p.setText(countPodpis+ " подписчиков");
+        this.name.setText(name + " " + family);
+        this.city.setText("Город: " + city);
+        this.tel.setText("Телефон: " + tel);
+        this.p.setText(countPodpis + " подписчиков");
     }
 
     @Override
