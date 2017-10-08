@@ -7,7 +7,7 @@
     android:gravity="bottom"
     android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
+
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
@@ -15,17 +15,21 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="102dp"
-        android:layout_height="90dp"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
         app:srcCompat="@mipmap/ic_launcher_click"
-        android:layout_weight="1.36" />
+        android:layout_marginLeft="12dp"/>
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
+        android:layout_gravity="center_vertical"
+        android:layout_marginBottom="16dp"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
         android:text="AYG"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="@color/white"
+        android:textSize="14dp" />
 
 </LinearLayout>

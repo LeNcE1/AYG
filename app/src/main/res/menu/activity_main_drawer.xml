@@ -12,11 +12,11 @@
             android:title="Мой профиль" />
         <item
             android:id="@+id/nav_my_lent"
-            android:icon="@drawable/ic_account_circle_amber_500_24dp"
+            android:icon="@drawable/ic_collections_bookmark_amber_500_24dp"
             android:title="Лента подписок" />
         <item
             android:id="@+id/nav_message"
-            android:icon="@drawable/ic_map_amber_500_24dp"
+            android:icon="@drawable/ic_mail_outline_amber_500_24dp"
             android:title="Сообщение" />
         <item
             android:id="@+id/nav_slideshow"
@@ -28,7 +28,7 @@
             android:title="Map" />
         <item
             android:id="@+id/nav_history"
-            android:icon="@drawable/ic_map_amber_500_24dp"
+            android:icon="@drawable/ic_account_balance_amber_500_24dp"
             android:title="Историческая спрвка"/>
 
     </group>
