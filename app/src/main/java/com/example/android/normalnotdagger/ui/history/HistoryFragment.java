@@ -2,25 +2,20 @@ package com.example.android.normalnotdagger.ui.history;
 
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import com.example.android.normalnotdagger.R;
 import com.example.android.normalnotdagger.models.new_model.categ_model.Category;
+import com.example.android.normalnotdagger.ui.history.cards.CardFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,21 +27,12 @@ public class HistoryFragment extends Fragment implements HistoryMVP{
     HistoryAdapter adapter;
 
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         recyclerView = (RecyclerView) inflater.inflate(
                 R.layout.recycler_view, container, false);
-
-
-
-//        ActionBar toolbar = ((AppCompatActivity)getActivity()).getSupportActionBar();
-//        toolbar.setDisplayHomeAsUpEnabled(true);
-
-
-
-        Log.e("Log",""+((AppCompatActivity)getActivity()).getSupportActionBar().getDisplayOptions());
-
         Bundle bundle = getArguments();
         if(bundle!=null){
             pr = new HistoryPresentr(this);
@@ -93,19 +79,18 @@ public class HistoryFragment extends Fragment implements HistoryMVP{
     }
 
     @Override
-    public void cardsFinish(boolean mark, int id) {
-        if(mark){
-            Log.e("Log", "start " + id);
-        }
-        else {
-            Log.e("Log", "stop");
-        }
+    public void cardsStart(int id) {
+        CardFragment youFragment = new CardFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("id", id+"");
+        youFragment.setArguments(bundle);
+        android.app.FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()          // получаем экземпляр FragmentTransaction
+                .replace(R.id.news_list, youFragment)
+                .addToBackStack("myStack")
+                .commit();
     }
 
-    @Override
-    public void cardsStart(int id) {
-        pr.carsIsEmpty(id);
-    }
 
     @Override
     public void creadList(int id) {

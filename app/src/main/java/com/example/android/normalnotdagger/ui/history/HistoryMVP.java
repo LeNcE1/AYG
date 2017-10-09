@@ -10,7 +10,6 @@ public interface HistoryMVP {
     void showError(String error);
     void startProgressBar();
     void stopProgressBar();
-    void cardsFinish(boolean mark, int id);
     void cardsStart(int id);
     void creadList(int id);
 }

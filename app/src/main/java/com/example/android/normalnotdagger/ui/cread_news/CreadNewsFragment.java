@@ -168,7 +168,26 @@ public class CreadNewsFragment extends Fragment implements CreadNewsMVP {
         cread.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                creadNewsPresentr.loadNew(title.getText().toString(), shorts.getText().toString(), text.getText().toString(), imags);
+                if(title.getText().length()==0){
+                    Toast.makeText(getActivity(), "Введите заголовок", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    if(shorts.getText().length() ==0){
+                        Toast.makeText(getActivity(), "Введите описание", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        if( text.getText().length() ==0 ) {
+                            Toast.makeText(getActivity(), "Введите текст", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            String t = text.getText().toString().replace("\n\n", "");
+                            String t1 = t.replace("  ", "");
+                            String tit = title.getText().toString().replace("  ", "");
+                            String sh = shorts.getText().toString().replace("  ", "");
+                            creadNewsPresentr.loadNew(tit, sh, t1, imags);
+                        }
+                    }
+                }
             }
         });
 

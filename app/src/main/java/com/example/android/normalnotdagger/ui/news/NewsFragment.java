@@ -2,6 +2,7 @@ package com.example.android.normalnotdagger.ui.news;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import com.example.android.normalnotdagger.R;
 import com.example.android.normalnotdagger.models.new_model.news.News;
 import com.example.android.normalnotdagger.ui.commits.ICommentsFragment;
 import com.example.android.normalnotdagger.ui.full_news.FullNewsFragment;
+import com.example.android.normalnotdagger.ui.user_info.UserFragment;
 import com.example.android.normalnotdagger.ui.user_wall.UserWallFragment;
 
 import java.util.ArrayList;
@@ -33,11 +35,17 @@ public class NewsFragment extends Fragment implements NewsMVP{
     SharedPreferences user;
     String pod = null;
     String m = null;
+    ProgressDialog loading;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         recyclerView = (RecyclerView) inflater.inflate(
                 R.layout.recycler_view, container, false);
+
+        loading = new ProgressDialog(getActivity());
+        loading.setMessage("Загрузка новостей");
+        loading.setIndeterminate(true);
+        loading.setCancelable(false);
         user = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
         pr = new NewsPresentr(this, user);
 
@@ -60,8 +68,13 @@ public class NewsFragment extends Fragment implements NewsMVP{
             }
         }
         else{
-            Log.e("pod", " not NULL" + bundle.getString("pod"));
-            pr.loadNewspod(user.getString("id", "1"), 0);
+            if(!user.getString("id","n").equals("n")) {
+                Log.e("pod", " not NULL" + bundle.getString("pod"));
+                pr.loadNewspod(user.getString("id", "1"), 0);
+            }
+            else{
+                Toast.makeText(getActivity(), "Авторезуйтесь", Toast.LENGTH_SHORT).show();
+            }
         }
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(newsAdapter);
@@ -74,6 +87,7 @@ public class NewsFragment extends Fragment implements NewsMVP{
     public void showNews(List<News> posts) {
         newsAdapter.addPosts(posts);
         recyclerView.getAdapter().notifyDataSetChanged();
+
     }
 
     @Override
@@ -98,11 +112,13 @@ public class NewsFragment extends Fragment implements NewsMVP{
 
     @Override
     public void startProgresBar() {
+        loading.show();
         //запустить прогрес бар
     }
 
     @Override
     public void stopProgresBar() {
+        loading.dismiss();
         //остановить прогрес бар
     }
 
@@ -147,7 +163,7 @@ public class NewsFragment extends Fragment implements NewsMVP{
         bundle.putString("short", post.getShort());
         bundle.putString("text", post.getText());
         bundle.putString("data", post.getDate());
-        bundle.putString("avtor", post.getUserLogin());
+        bundle.putString("avtor", post.getUserId()==0?"Администратор":post.getUserLogin());
         Log.e("News", "avtor "+post.getUserId());
         bundle.putString("avtor_id", post.getUserId().toString());
         bundle.putString("view", post.getViews());
@@ -166,6 +182,16 @@ public class NewsFragment extends Fragment implements NewsMVP{
                 .addToBackStack("myStack")
                 .commit();
 
+    }
+
+    @Override
+    public void startMyInfo() {
+        UserFragment youFragment = new UserFragment();
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()          // получаем экземпляр FragmentTransaction
+                .replace(R.id.content, youFragment)
+                .addToBackStack("myStack")
+                .commit();
     }
 
 

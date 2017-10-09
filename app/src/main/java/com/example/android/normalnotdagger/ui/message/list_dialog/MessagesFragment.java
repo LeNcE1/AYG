@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.android.normalnotdagger.R;
 import com.example.android.normalnotdagger.models.new_model.messages.Message;
@@ -42,6 +43,9 @@ public class MessagesFragment extends Fragment implements MessagersMVP{
            // messageAdapter = new MessageAdapter(posts);
            // recyclerView.setAdapter(messageAdapter);
 
+        }
+        else{
+            Toast.makeText(getActivity(),"Для просмотра сообщений необходимо авторезироватся",Toast.LENGTH_SHORT).show();
         }
         return recyclerView;
     }

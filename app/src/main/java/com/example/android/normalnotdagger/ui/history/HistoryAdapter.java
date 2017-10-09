@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.normalnotdagger.R;
@@ -45,11 +46,14 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
             public void onClick(View view) {
                 if(category.getChildrens()==0){
                     mvp.creadList(category.getId());
-                    //pr.loadingCateg(category.getId());
                 }
                 else{
-                    mvp.cardsStart(category.getId());
-                    Log.e("TO/DO", "stratCards");
+                    if(pr.carsIsEmpty(category.getId().toString())){
+                        mvp.cardsStart(category.getId());
+                    }
+                    else{
+                        holder.start.setVisibility(View.GONE);
+                    }
                 }
             }
         });
@@ -66,6 +70,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
     class HistoryViewHolder extends RecyclerView.ViewHolder{
         @BindView(R.id.name)
         TextView name;
+        @BindView(R.id.start)
+        ImageView start;
         @BindView(R.id.layout)
         View view;
 

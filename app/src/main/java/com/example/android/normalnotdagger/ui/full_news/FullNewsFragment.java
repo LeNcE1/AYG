@@ -9,6 +9,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Html;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +24,7 @@ import com.example.android.normalnotdagger.models.new_model.news.News;
 import com.example.android.normalnotdagger.ui.commits.ICommentsFragment;
 import com.example.android.normalnotdagger.ui.news.NewsMVP;
 import com.example.android.normalnotdagger.ui.news.NewsPresentr;
+import com.example.android.normalnotdagger.ui.user_info.UserFragment;
 import com.example.android.normalnotdagger.ui.user_wall.UserWallFragment;
 import com.squareup.picasso.Picasso;
 
@@ -67,16 +70,16 @@ public class FullNewsFragment extends Fragment implements NewsMVP {
     ImageView gallery_imag3;
 
 
-    List<String> getList(String mass){
+    List<String> getList(String mass) {
         List<String> rez = new ArrayList<>();
         JSONArray m = null;
         try {
-            m = new JSONArray(mass.replace("[","[\"").replace(",","\",\"").replace("]","\"]"));
-            for(int i = 0; i < m.length(); i++) {
+            m = new JSONArray(mass.replace("[", "[\"").replace(",", "\",\"").replace("]", "\"]"));
+            for (int i = 0; i < m.length(); i++) {
                 rez.add(m.get(i).toString());
             }
         } catch (JSONException e) {
-            Log.e("error", "dont List: "+e);
+            Log.e("error", "dont List: " + e);
             e.printStackTrace();
         }
 
@@ -92,84 +95,83 @@ public class FullNewsFragment extends Fragment implements NewsMVP {
         final Bundle bundle = getArguments();
         List<String> imags = new ArrayList<>();
 
-        if(bundle!=null){
+        if (bundle != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 text.setText(Html.fromHtml(bundle.getString("text"), Html.FROM_HTML_MODE_LEGACY));
-            }
-            else{
+            } else {
                 text.setText(Html.fromHtml(bundle.getString("text")));
             }
 
             shorts.setText(bundle.getString("short"));
             title.setText(bundle.getString("title"));
             dateTextView.setText(bundle.getString("data"));
-            autorTextView.setText(bundle.getString("avtor"));
+            SpannableString spannableString = new SpannableString(bundle.getString("avtor"));
+            spannableString.setSpan(new UnderlineSpan(), 0, bundle.getString("avtor").length(), 0);
+            autorTextView.setText(spannableString);
             viewsTextView.setText(bundle.getString("view"));
             ratingTextView.setText(bundle.getString("reyting"));
             if (bundle.getString("like").equals("1")) {
                 like.setColorFilter(Color.RED);
-            }
-            else{
-                if(bundle.getString("like").equals("0")){
+            } else {
+                if (bundle.getString("like").equals("0")) {
 
-                }
-                else{
+                } else {
                     deslike.setColorFilter(Color.RED);
                 }
             }
 
 
             imags = getList(bundle.getString("imags"));
-            Log.e("imags",imags.size()+"");
-            switch (imags.size()){
-                case 0:{
+            Log.e("imags", imags.size() + "");
+            switch (imags.size()) {
+                case 0: {
                     break;
                 }
-                case 1:{
+                case 1: {
                     gallery_imag1.setVisibility(View.VISIBLE);
-                    Picasso.with(gallery_imag1.getContext()).load(("http://9834436605.myjino.ru/"+imags.get(0)).replace(" ",""))
+                    Picasso.with(gallery_imag1.getContext()).load(("http://9834436605.myjino.ru/" + imags.get(0)).replace(" ", ""))
                             //.placeholder(R.drawable.ic_camera_alt_black_24dp)
                             .fit()
                             .centerCrop()
                             .into(gallery_imag1);
                     break;
                 }
-                case 2:{
+                case 2: {
                     gallery_imag1.setVisibility(View.VISIBLE);
-                    Log.e("imag", "1: " + "http://9834436605.myjino.ru/"+imags.get(0));
-                    Picasso.with(gallery_imag1.getContext()).load(("http://9834436605.myjino.ru/"+imags.get(0)).replace(" ",""))
+                    Log.e("imag", "1: " + "http://9834436605.myjino.ru/" + imags.get(0));
+                    Picasso.with(gallery_imag1.getContext()).load(("http://9834436605.myjino.ru/" + imags.get(0)).replace(" ", ""))
                             //.placeholder(R.drawable.ic_camera_alt_black_24dp)
                             .fit()
                             .centerCrop()
                             .into(gallery_imag1);
 
                     gallery_imag2.setVisibility(View.VISIBLE);
-                    Log.e("imag", "2: " + ("http://9834436605.myjino.ru/"+imags.get(1)).replace(" ",""));
-                    Picasso.with(gallery_imag2.getContext()).load(("http://9834436605.myjino.ru/"+imags.get(1)).replace(" ",""))
+                    Log.e("imag", "2: " + ("http://9834436605.myjino.ru/" + imags.get(1)).replace(" ", ""));
+                    Picasso.with(gallery_imag2.getContext()).load(("http://9834436605.myjino.ru/" + imags.get(1)).replace(" ", ""))
                             //.placeholder(R.drawable.ic_camera_alt_black_24dp)
                             .fit()
                             .centerCrop()
                             .into(gallery_imag2);
                     break;
                 }
-                case 3:{
-                    Log.e("imag", "1: " + "http://9834436605.myjino.ru/"+imags.get(0));
+                case 3: {
+                    Log.e("imag", "1: " + "http://9834436605.myjino.ru/" + imags.get(0));
                     gallery_imag1.setVisibility(View.VISIBLE);
-                    Picasso.with(gallery_imag1.getContext()).load(("http://9834436605.myjino.ru/"+imags.get(0)).replace(" ",""))
+                    Picasso.with(gallery_imag1.getContext()).load(("http://9834436605.myjino.ru/" + imags.get(0)).replace(" ", ""))
                             //.placeholder(R.drawable.ic_camera_alt_black_24dp)
                             .fit()
                             .centerCrop()
                             .into(gallery_imag1);
-                    Log.e("imag", "2: " + "http://9834436605.myjino.ru/"+imags.get(1));
+                    Log.e("imag", "2: " + "http://9834436605.myjino.ru/" + imags.get(1));
                     gallery_imag2.setVisibility(View.VISIBLE);
-                    Picasso.with(gallery_imag1.getContext()).load(("http://9834436605.myjino.ru/"+imags.get(1)).replace(" ",""))
+                    Picasso.with(gallery_imag1.getContext()).load(("http://9834436605.myjino.ru/" + imags.get(1)).replace(" ", ""))
                             //.placeholder(R.drawable.ic_camera_alt_black_24dp)
                             .fit()
                             .centerCrop()
                             .into(gallery_imag2);
-                    Log.e("imag", "3: " + "http://9834436605.myjino.ru/"+imags.get(2));
+                    Log.e("imag", "3: " + "http://9834436605.myjino.ru/" + imags.get(2));
                     gallery_imag3.setVisibility(View.VISIBLE);
-                    Picasso.with(gallery_imag1.getContext()).load(("http://9834436605.myjino.ru/"+imags.get(2)).replace(" ",""))
+                    Picasso.with(gallery_imag1.getContext()).load(("http://9834436605.myjino.ru/" + imags.get(2)).replace(" ", ""))
                             //.placeholder(R.drawable.ic_camera_alt_black_24dp)
                             .fit()
                             .centerCrop()
@@ -181,21 +183,21 @@ public class FullNewsFragment extends Fragment implements NewsMVP {
             like.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(!user.getString("id","error").equals("error")) {
-                        switch (bundle.getString("like")){
-                            case "0":{
+                    if (!user.getString("id", "error").equals("error")) {
+                        switch (bundle.getString("like")) {
+                            case "0": {
                                 pr.addLike(user.getString("id", "1"), bundle.getString("post_id"), 1);
                                 Integer i = Integer.valueOf(ratingTextView.getText().toString());
                                 i++;
                                 ratingTextView.setText(i.toString());
                                 like.setColorFilter(Color.RED);
                                 deslike.setColorFilter(Color.parseColor("#FFC107"));
-                                bundle.putString("like","1");
+                                bundle.putString("like", "1");
                                 break;
                             }
-                            case "1":{
-                                pr.addLike(user.getString("id", "1"), bundle.getString("post_id"),0);
-                                bundle.putString("like","0");
+                            case "1": {
+                                pr.addLike(user.getString("id", "1"), bundle.getString("post_id"), 0);
+                                bundle.putString("like", "0");
                                 Integer i = Integer.valueOf(ratingTextView.getText().toString());
                                 i--;
                                 ratingTextView.setText(i.toString());
@@ -204,13 +206,13 @@ public class FullNewsFragment extends Fragment implements NewsMVP {
                                 break;
 
                             }
-                            case "-1":{
+                            case "-1": {
                                 pr.addLike(user.getString("id", "1"), bundle.getString("post_id"), 1);
                                 Integer i = Integer.valueOf(ratingTextView.getText().toString());
                                 i--;
                                 i--;
                                 ratingTextView.setText(i.toString());
-                                bundle.putString("like","1");
+                                bundle.putString("like", "1");
                                 deslike.setColorFilter(Color.parseColor("#FFC107"));
                                 like.setColorFilter(Color.RED);
                                 break;
@@ -222,18 +224,18 @@ public class FullNewsFragment extends Fragment implements NewsMVP {
             deslike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(!user.getString("id","error").equals("error")) {
-                        switch (bundle.getString("like")){
-                            case "0":{
+                    if (!user.getString("id", "error").equals("error")) {
+                        switch (bundle.getString("like")) {
+                            case "0": {
                                 pr.addLike(user.getString("id", "1"), bundle.getString("post_id"), -1);
                                 Integer i = Integer.valueOf(ratingTextView.getText().toString());
                                 i--;
-                                bundle.putString("like","-1");
+                                bundle.putString("like", "-1");
                                 ratingTextView.setText(i.toString());
                                 deslike.setColorFilter(Color.RED);
                                 break;
                             }
-                            case "1":{
+                            case "1": {
                                 pr.addLike(user.getString("id", "1"), bundle.getString("post_id"), -1);
                                 Integer i = Integer.valueOf(ratingTextView.getText().toString());
                                 i--;
@@ -241,14 +243,14 @@ public class FullNewsFragment extends Fragment implements NewsMVP {
                                 ratingTextView.setText(i.toString());
                                 like.setColorFilter(Color.parseColor("#FFC107"));
                                 deslike.setColorFilter(Color.RED);
-                                bundle.putString("like","-1");
+                                bundle.putString("like", "-1");
                             }
-                            case "-1":{
-                                pr.addLike(user.getString("id", "1"), bundle.getString("post_id"),0);
+                            case "-1": {
+                                pr.addLike(user.getString("id", "1"), bundle.getString("post_id"), 0);
                                 Integer i = Integer.valueOf(ratingTextView.getText().toString());
                                 i++;
                                 ratingTextView.setText(i.toString());
-                                bundle.putString("like","0");
+                                bundle.putString("like", "0");
                                 like.setColorFilter(Color.parseColor("#FFC107"));
                                 deslike.setColorFilter(Color.parseColor("#FFC107"));
                                 break;
@@ -261,20 +263,30 @@ public class FullNewsFragment extends Fragment implements NewsMVP {
             autorTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(autorTextView.getText().length()==0){
-                        Log.e("avtor","avtor");
-                    }
-                    else{
-                        UserWallFragment youFragment = new UserWallFragment();
-                        Bundle bundle1 = new Bundle();
-                        Log.e("avtor_id",  bundle.getString("avtor_id") + "ee");
-                        bundle1.putString("avtor_id", bundle.getString("avtor_id"));
-                        youFragment.setArguments(bundle1);
-                        FragmentManager fragmentManager = getFragmentManager();
-                        fragmentManager.beginTransaction()          // получаем экземпляр FragmentTransaction
-                                .replace(R.id.content, youFragment)
-                                .addToBackStack("myStack")
-                                .commit();
+                    if (autorTextView.getText().length() == 0) {
+                        Log.e("avtor", "avtor");
+                    } else {
+                        if (!bundle.getString("avtor").equals("Администратор")) {
+                            if (bundle.getString("avtor_id").equals(user.getString("id", "e"))) {
+                                UserFragment youFragment = new UserFragment();
+                                FragmentManager fragmentManager = getFragmentManager();
+                                fragmentManager.beginTransaction()          // получаем экземпляр FragmentTransaction
+                                        .replace(R.id.content, youFragment)
+                                        .addToBackStack("myStack")
+                                        .commit();
+                            } else {
+                                UserWallFragment youFragment = new UserWallFragment();
+                                Bundle bundle1 = new Bundle();
+                                Log.e("avtor_id", bundle.getString("avtor_id") + "ee");
+                                bundle1.putString("avtor_id", bundle.getString("avtor_id"));
+                                youFragment.setArguments(bundle1);
+                                FragmentManager fragmentManager = getFragmentManager();
+                                fragmentManager.beginTransaction()          // получаем экземпляр FragmentTransaction
+                                        .replace(R.id.content, youFragment)
+                                        .addToBackStack("myStack")
+                                        .commit();
+                            }
+                        }
                     }
                 }
             });
@@ -284,9 +296,9 @@ public class FullNewsFragment extends Fragment implements NewsMVP {
                 public void onClick(View view) {
 
                     ICommentsFragment youFragment = new ICommentsFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putString("post_id", bundle.getString("post_id"));
-                    youFragment.setArguments(bundle);
+                    Bundle bundle1 = new Bundle();
+                    bundle1.putString("post_id", bundle.getString("post_id"));
+                    youFragment.setArguments(bundle1);
                     FragmentManager fragmentManager = getFragmentManager();
                     fragmentManager.beginTransaction()          // получаем экземпляр FragmentTransaction
                             .replace(R.id.content, youFragment)
@@ -350,6 +362,11 @@ public class FullNewsFragment extends Fragment implements NewsMVP {
 
     @Override
     public void startFullNews(News news) {
+
+    }
+
+    @Override
+    public void startMyInfo() {
 
     }
 }

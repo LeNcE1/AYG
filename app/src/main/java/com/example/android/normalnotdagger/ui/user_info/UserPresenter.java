@@ -38,6 +38,5 @@ public class UserPresenter {
                 mvp.stopProgresBar();
             }
         });
-
     }
 }

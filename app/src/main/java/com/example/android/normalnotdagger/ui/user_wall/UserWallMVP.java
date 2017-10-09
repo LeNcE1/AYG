@@ -8,4 +8,5 @@ public interface UserWallMVP {
     void showError(String error);
     void startProgresBar();
     void stopProgresBar();
+    void replaseNameButton();
 }

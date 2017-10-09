@@ -1,7 +1,5 @@
 package com.example.android.normalnotdagger.ui.news;
 
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
@@ -138,8 +136,15 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.RibotViewHolde
         holder.autorTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(example.getUserId() != 0)
-                pr.startUserInfo(example.getUserId().toString());
+                if(example.getUserId() != 0) {
+                    if(user.getString("id", "e").equals(example.getUserId().toString())){
+                        pr.startMyInfo();
+                    }
+                    else {
+                        pr.startUserInfo(example.getUserId().toString());
+                    }
+                }
+
             }
         });
 

@@ -29,11 +29,11 @@ import com.example.android.normalnotdagger.ui.user_info.UserFragment;
 
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, MainMVP {
+        implements NavigationView.OnNavigationItemSelectedListener{
 
 
     SharedPreferences user;
-
+    NavigationView navigationView;
 
 
     // Binder given to clients
@@ -68,8 +68,21 @@ public class MainActivity extends AppCompatActivity
 
 
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        if(user.getString("id", "n").equals("n")){
+            Log.e("vis", "vis");
+            navigationView.getMenu().getItem(2).setVisible(false);
+            navigationView.getMenu().getItem(3).setVisible(false);
+            navigationView.getMenu().getItem(4).setVisible(false);
+
+        }
+        else{
+            navigationView.getMenu().getItem(2).setVisible(true);
+            navigationView.getMenu().getItem(3).setVisible(true);
+            navigationView.getMenu().getItem(4).setVisible(true);
+        }
 
 
 
@@ -92,8 +105,12 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+
+
+
 
         Log.e("Menu", "onCreateOptionsMenu");
         return true;
@@ -101,6 +118,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+
         Log.e("Menu", "onOptionsItemSelected");
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -121,6 +140,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         Log.e("Menu", "onNavigationItemSelected");
+
+
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
@@ -237,8 +258,4 @@ public class MainActivity extends AppCompatActivity
         fragmentManager1.beginTransaction().replace(R.id.content, fragment).commit();
     }
 
-    @Override
-    public void showPush(int count) {
-        Log.e("Servise", "New Message");
-    }
 }

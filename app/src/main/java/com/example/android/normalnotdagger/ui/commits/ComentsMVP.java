@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ComentsMVP {
     void showComments(List<Comment> comments);
-
+    void startUserInfo(String avtor_id);
     void showIsEmpty();
     void startProgresBar();
     void stopProgresBar();

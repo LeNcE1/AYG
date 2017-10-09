@@ -16,6 +16,7 @@ public class ImessageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.i_news_fragment, container, false);
+
         MessagesFragment youFragment = new MessagesFragment();
         android.app.FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()          // получаем экземпляр FragmentTransaction

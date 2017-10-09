@@ -99,7 +99,7 @@ public interface UmoriliApi {
     Call<CategModel> getCategChildrens(@Query("parent") int parents_id);
 
     @GET("/api/get-cards")
-    Call<CardsModel> getCards(@Query("category") int id_categ,
+    Call<CardsModel> getCards(@Query("category") String id_categ,
                               @Query("limit") int limit,
                               @Query("offset") int offset);                    // выгрузка карточки
 
@@ -121,12 +121,11 @@ public interface UmoriliApi {
                                   @Query("date") String date);                  //Отправка сообщения
 
     @GET("/api/add-subscribe")
-    Call<StatusModel> addPodpiska(@Query("user_id")String user_id, @Query("author_id") String author_id);
+    Call<StatusModel> addPodpiska(@Query("user_id")String user_id,
+                                  @Query("author_id") String author_id);        //добавление подписка
 
-
-
-    //отправка сообщения
-    //добавление подписка
-    //удаление подписки
+    @GET("/api/del-subscribe")
+    Call<StatusModel> delPod(@Query("user_id")String user_id,
+                             @Query("author_id") String author_id);             //удаление подписки
 
 }

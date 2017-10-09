@@ -2,10 +2,12 @@ package com.example.android.normalnotdagger.ui.user_wall;
 
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +40,6 @@ public class UserWallFragment extends Fragment implements UserWallMVP{
     Button message;
     @BindView(R.id.podpiska)
     Button podpiska;
-    UserModel userModel;
 
 
 
@@ -63,13 +64,33 @@ public class UserWallFragment extends Fragment implements UserWallMVP{
         message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getActivity(),"Написать сообщение to do", Toast.LENGTH_LONG).show();
+                FragmentManager fm = getFragmentManager();
+                SendMessageDialog deleteDialog = new SendMessageDialog();
+                Bundle bundle1 = new Bundle();
+                bundle1.putString("id", bundle.getString("avtor_id"));
+                deleteDialog.setArguments(bundle1);
+                deleteDialog.show(fm, "Change");
             }
         });
+        Log.e("TEST","StartName "+ podpiska.getText().toString());
+        Log.e("TEST", "isPodpis "+presentr.isPodpis(user.getString("id", "error"),bundle.getString("avtor_id")) + "");
+        if(!presentr.isPodpis(user.getString("id", "error"),bundle.getString("avtor_id"))){
+            podpiska.setText("Отписаться");
+        }
+        else{
+            podpiska.setText("Подписаться");
+        }
         podpiska.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presentr.addPod(user.getString("id", "error"),bundle.getString("avtor_id"));
+                Log.e("TEST", "FinishName "+podpiska.getText().toString());
+                if(podpiska.getText().equals("Отписаться")){
+                    presentr.deletePod(user.getString("id", "error"),bundle.getString("avtor_id"));
+
+                }
+                else{
+                    presentr.addPod(user.getString("id", "error"),bundle.getString("avtor_id"));
+                }
                // Toast.makeText(getActivity(),"Подписаться на обновления to do", Toast.LENGTH_LONG).show();
             }
         });
@@ -99,5 +120,19 @@ public class UserWallFragment extends Fragment implements UserWallMVP{
     @Override
     public void stopProgresBar() {
 
+    }
+
+    @Override
+    public void replaseNameButton() {
+        switch (podpiska.getText().toString()){
+            case "Отписаться":{
+                podpiska.setText("Подписаться");
+                break;
+            }
+            case "Подписаться":{
+                podpiska.setText("Отписаться");
+                break;
+            }
+        }
     }
 }

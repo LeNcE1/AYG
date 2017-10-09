@@ -54,7 +54,7 @@ public class DialogItemFragment extends Fragment{
                     Toast.makeText(getActivity(),"Введите текст",Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    pr.senrMessage(user.getString("id","error"),ListMessageSingleton.getInstance().getId(),text.getText().toString());
+                    pr.senrMessage(user.getString("id","error"),ListMessageSingleton.getInstance().getId(),text.getText().toString().replace("\n\n","").replace("  ",""));
                 }
             }
         });

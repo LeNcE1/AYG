@@ -17,4 +17,5 @@ public interface NewsMVP {
     void startComments(String post_id);
     void showDeletePost(String status);
     void startFullNews(News news);
+    void startMyInfo();
 }

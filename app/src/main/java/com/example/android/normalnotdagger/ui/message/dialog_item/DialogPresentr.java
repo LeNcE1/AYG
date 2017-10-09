@@ -29,7 +29,7 @@ public class DialogPresentr {
             }
         });
     }
-    void senrMessage(String form_id, String to_id, String text){
+  public void senrMessage(String form_id, String to_id, String text){
         Calendar calendar = Calendar.getInstance();
         String dataMessage = calendar.getTime().toString();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

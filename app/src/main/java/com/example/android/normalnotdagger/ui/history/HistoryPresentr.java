@@ -63,22 +63,25 @@ public class HistoryPresentr {
         }
 
     }
-    void carsIsEmpty(final int id){
+    boolean rez = false;
+
+    boolean carsIsEmpty(String id){
         App.getApi().getCards(id, 1, 0).enqueue(new Callback<CardsModel>() {
             @Override
             public void onResponse(Call<CardsModel> call, Response<CardsModel> response) {
                 if(response.body().getCards().isEmpty()){
-                    mvp.cardsFinish(false, id);
+                    rez = false;
                 }
                 else{
-                    mvp.cardsFinish(true, id);
+                    rez = true;
                 }
             }
-
             @Override
             public void onFailure(Call<CardsModel> call, Throwable t) {
-               mvp.cardsFinish(false, id);
+               rez = false;
             }
         });
+        return rez;
     }
+
 }

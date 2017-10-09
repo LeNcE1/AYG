@@ -37,8 +37,11 @@ public class UserWallPresentr {
         App.getApi().addPodpiska(my_id,user_id).enqueue(new Callback<StatusModel>() {
             @Override
             public void onResponse(Call<StatusModel> call, Response<StatusModel> response) {
-                if(response.body().getStatus().equals("false")){
-                    Log.e("addpod", "fiasko");
+                if(response.body().getStatus().equals("fail")){
+                    Log.e("addpod", "fail");
+                }
+                else{
+                    mvp.replaseNameButton();
                 }
             }
 
@@ -47,6 +50,49 @@ public class UserWallPresentr {
                 Log.e("addpod", "fiasko");
             }
         });
+    }
+
+    void deletePod(String my_id, String user_id){
+        App.getApi().delPod(my_id, user_id).enqueue(new Callback<StatusModel>() {
+            @Override
+            public void onResponse(Call<StatusModel> call, Response<StatusModel> response) {
+                if(response.body().getStatus().equals("fail")){
+
+                }
+                else {
+                    mvp.replaseNameButton();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<StatusModel> call, Throwable t) {
+
+            }
+        });
+    }
+
+    boolean flag = false;
+
+    boolean isPodpis(final String my_id, final String user_id){
+        App.getApi().addPodpiska(my_id,user_id).enqueue(new Callback<StatusModel>() {
+            @Override
+            public void onResponse(Call<StatusModel> call, Response<StatusModel> response) {
+                if(response.body().getStatus().equals("fail")){
+                    flag = true;
+                }
+                else{
+                    deletePod(my_id,user_id);
+                    flag = false;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<StatusModel> call, Throwable t) {
+                flag = false;
+                Log.e("addpod", "fiasko");
+            }
+        });
+        return  flag;
     }
 
 }

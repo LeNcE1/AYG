@@ -23,11 +23,13 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
     List<Comment> comments = new ArrayList<>();
     CommentPresentr presentr;
     SharedPreferences user;
+    ComentsMVP mvp;
 
-    CommentsAdapter(List<Comment> comments, CommentPresentr presentr, SharedPreferences user){
+    CommentsAdapter(List<Comment> comments, CommentPresentr presentr, SharedPreferences user, ComentsMVP mvp){
         this.comments = comments;
         this.presentr = presentr;
         this.user = user;
+        this.mvp = mvp;
     }
 
     void addcomments(List<Comment> list){
@@ -46,7 +48,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
     @Override
     public void onBindViewHolder(CommentsAdapter.CommentsViewHolder holder, int position) {
 
-        Comment item = comments.get(position);
+        final Comment item = comments.get(position);
         Log.e("nameAdapter", item.getUserId().toString());
 
         holder.avtor.setText(item.getUser_login());
@@ -56,7 +58,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                mvp.startUserInfo(item.getUserId().toString());
             }
         });
 

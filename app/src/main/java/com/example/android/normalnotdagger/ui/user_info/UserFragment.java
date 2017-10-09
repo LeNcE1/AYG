@@ -4,6 +4,7 @@ package com.example.android.normalnotdagger.ui.user_info;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.normalnotdagger.MainActivity;
 import com.example.android.normalnotdagger.R;
 import com.example.android.normalnotdagger.ui.login.LoginFragment;
 import com.example.android.normalnotdagger.ui.news.NewsFragment;
@@ -55,12 +57,13 @@ public class UserFragment extends Fragment implements UserMVP {
                     user.edit().clear().commit();
                     user = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
                     //start логин фрагмент
-                    LoginFragment youFragment = new LoginFragment();
-                    FragmentManager fragmentManager = getFragmentManager();
-                    fragmentManager.beginTransaction()          // получаем экземпляр FragmentTransaction
-                            .replace(R.id.content, youFragment)
-                            .addToBackStack("myStack")
-                            .commit();
+                    startActivity( new Intent(getActivity(), MainActivity.class));
+//                    LoginFragment youFragment = new LoginFragment();
+//                    FragmentManager fragmentManager = getFragmentManager();
+//                    fragmentManager.beginTransaction()          // получаем экземпляр FragmentTransaction
+//                            .replace(R.id.content, youFragment)
+//                            .addToBackStack("myStack")
+//                            .commit();
 
                 }
             });
@@ -74,16 +77,17 @@ public class UserFragment extends Fragment implements UserMVP {
             //start логин фрагмент
         }
 
-        // TODO: 07.10.2017 поставить проверку 
-        NewsFragment youFragment = new NewsFragment();
-        Bundle bundle1 = new Bundle();
-        bundle1.putString("my", "123");
-        youFragment.setArguments(bundle1);
-        android.app.FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()          // получаем экземпляр FragmentTransaction
-                .replace(R.id.news_list, youFragment)
-                .addToBackStack("myStack")
-                .commit();
+        if (!user.getString("id", "error").equals("error")) {
+            NewsFragment youFragment = new NewsFragment();
+            Bundle bundle1 = new Bundle();
+            bundle1.putString("my", "123");
+            youFragment.setArguments(bundle1);
+            android.app.FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction()          // получаем экземпляр FragmentTransaction
+                    .replace(R.id.news_list, youFragment)
+                    .addToBackStack("myStack")
+                    .commit();
+        }
         return view;
     }
 

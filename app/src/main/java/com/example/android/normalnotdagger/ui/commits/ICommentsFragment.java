@@ -64,7 +64,16 @@ public class ICommentsFragment extends Fragment implements CommentsMVPadd{
                     Toast.makeText(getActivity(),"Введите текст", Toast.LENGTH_LONG).show();
                 }
                 else{
-                    presentr.addComment(text.getText().toString(),bundle.getString("post_id"));
+                    if(!user.getString("id", "n").equals("n")) {
+                        Log.e("Text do", text.getText().toString());
+                        String t = text.getText().toString().replace("\n\n", "");
+                        String t1 = t.replace("  ", "");
+                        Log.e("Text posle", t1);
+                        presentr.addComment(t1, bundle.getString("post_id"));
+                    }
+                    else{
+                        Toast.makeText(getActivity(),"Авторезируйтесь", Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         });

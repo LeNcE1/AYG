@@ -29,10 +29,14 @@ public class ListMessage extends Fragment {
         recyclerView = (RecyclerView) inflater.inflate(
                 R.layout.recycler_view, container, false);
         user = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
         Log.e("SIZE LIST", ListMessageSingleton.getInstance().getList().size() + "");
         adapter = new DialogAdapter(ListMessageSingleton.getInstance().getList(),user.getString("id","error"));
         recyclerView.setAdapter(adapter);
+       // recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
         return recyclerView;
     }
 }

@@ -4,6 +4,7 @@ package com.example.android.normalnotdagger.ui.login;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.android.normalnotdagger.MainActivity;
 import com.example.android.normalnotdagger.R;
 import com.example.android.normalnotdagger.ui.registr.RegistFragment;
 import com.example.android.normalnotdagger.ui.user_info.UserFragment;
@@ -64,19 +66,21 @@ public class LoginFragment extends Fragment implements LoginMVP{
 
     @Override
     public void showStatus(String status) {
-        Toast.makeText(getActivity(), status, Toast.LENGTH_SHORT).show();
-        UserFragment youFragment = new UserFragment();
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()          // получаем экземпляр FragmentTransaction
-                .replace(R.id.content, youFragment)
-                .addToBackStack("myStack")
-                .commit();
+        if(!user.getString("id", "n").equals("n")){
+            startActivity( new Intent(getActivity(), MainActivity.class));
+        }
+//        Toast.makeText(getActivity(), status, Toast.LENGTH_SHORT).show();
+//        UserFragment youFragment = new UserFragment();
+//        FragmentManager fragmentManager = getFragmentManager();
+//        fragmentManager.beginTransaction()          // получаем экземпляр FragmentTransaction
+//                .replace(R.id.content, youFragment)
+//                .addToBackStack("myStack")
+//                .commit();
 
     }
 
     @Override
     public void showError(String error) {
-
         Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
     }
 
