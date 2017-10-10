@@ -13,10 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.android.normalnotdagger.R;
-import com.example.android.normalnotdagger.models.new_model.user_info.UserModel;
 import com.example.android.normalnotdagger.ui.message.dialog_item.DialogPresentr;
-import com.example.android.normalnotdagger.ui.user_info.UserMVP;
-import com.example.android.normalnotdagger.ui.user_info.UserPresenter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,7 +21,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 
-public class SendMessageDialog extends DialogFragment{
+public class SendMessageDialog extends DialogFragment {
     @BindView(R.id.text)
     EditText text;
     @BindView(R.id.send)
@@ -43,7 +40,7 @@ public class SendMessageDialog extends DialogFragment{
         unbinder = ButterKnife.bind(this, view);
         user = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
         Bundle bundle = getArguments();
-        if(bundle !=null){
+        if (bundle != null) {
             id = bundle.getString("id", "e");
         }
         return view;
@@ -58,12 +55,11 @@ public class SendMessageDialog extends DialogFragment{
     @OnClick(R.id.send)
     public void onSendClicked() {
         DialogPresentr presentr = new DialogPresentr();
-        if(text.getText().toString().length() >0) {
-            presentr.senrMessage(user.getString("id", "e"), id, text.getText().toString().replace("\n\n","").replace("  ",""));
+        if (text.getText().toString().length() > 0) {
+            presentr.senrMessage(user.getString("id", "e"), id, text.getText().toString().replace("\n\n", "").replace("  ", ""));
             dismiss();
-        }
-        else{
-            Toast.makeText(getActivity(),"Введите текст",Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getActivity(), "Введите текст", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -71,7 +67,6 @@ public class SendMessageDialog extends DialogFragment{
     public void onCenselClicked() {
         dismiss();
     }
-
 
 
 }

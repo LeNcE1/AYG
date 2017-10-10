@@ -3,33 +3,34 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:id="@+id/layout"
-    android:layout_height="wrap_content">
+    android:background="@color/white"
+    android:layout_height="match_parent"
+    android:gravity="top">
 
             <TextView
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="24dp"
                 android:layout_marginLeft="32dp"
                 android:layout_marginRight="32dp"
                 android:layout_marginTop="16dp"
-                android:layout_weight="1"
-                android:ems="10"
+
                 android:hint="Название"
-                android:inputType="textPersonName"
+
                 android:textColor="@color/textHead"
                 android:textSize="20dp" />
 
             <TextView
                 android:id="@+id/text"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/text"
-                android:layout_marginBottom="16dp"
                 android:layout_marginLeft="32dp"
                 android:layout_marginRight="32dp"
-                android:layout_weight="9.41"
-                android:ems="10"
+                android:textSize="14dp"
+                android:textColor="@color/textSubtitle"
+
                 android:hint="Текст"
                 android:inputType="textMultiLine" />
 

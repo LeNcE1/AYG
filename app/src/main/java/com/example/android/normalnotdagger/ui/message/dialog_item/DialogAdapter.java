@@ -20,7 +20,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DialogAdapter extends RecyclerView.Adapter<DialogAdapter.DialogViewHolder> {
+public class DialogAdapter extends RecyclerView.Adapter<DialogAdapter.DialogViewHolder>{
     List<UserMessage> messages = new ArrayList<>();
     DialogPresentr pr = new DialogPresentr();
     String id;
@@ -94,6 +94,8 @@ public class DialogAdapter extends RecyclerView.Adapter<DialogAdapter.DialogView
     public int getItemCount() {
         return messages.size();
     }
+
+
 
     public class DialogViewHolder extends RecyclerView.ViewHolder {
 

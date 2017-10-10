@@ -29,7 +29,9 @@ public class DialogPresentr {
             }
         });
     }
+    boolean res=false;
   public void senrMessage(String form_id, String to_id, String text){
+
         Calendar calendar = Calendar.getInstance();
         String dataMessage = calendar.getTime().toString();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -39,13 +41,18 @@ public class DialogPresentr {
             public void onResponse(Call<StatusModel> call, Response<StatusModel> response) {
                 if(response.body().getStatus().equals("OK")){
                     Log.e("messag", "send");
+
                 }
             }
 
             @Override
             public void onFailure(Call<StatusModel> call, Throwable t) {
                 Log.e("messag", "error");
+
+
             }
+
         });
+
     }
 }
