@@ -16,6 +16,10 @@ import retrofit2.Response;
 
 public class DialogPresentr {
 
+    SendMVP mvp;
+   public DialogPresentr(SendMVP mvp){
+        this.mvp = mvp;
+    }
     void addView(String id, String user_id){
         App.getApi().getView(id, user_id).enqueue(new Callback<StatusModel>() {
             @Override
@@ -40,6 +44,7 @@ public class DialogPresentr {
             @Override
             public void onResponse(Call<StatusModel> call, Response<StatusModel> response) {
                 if(response.body().getStatus().equals("OK")){
+                    mvp.stopProgressBar();
                     Log.e("messag", "send");
 
                 }

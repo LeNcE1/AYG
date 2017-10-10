@@ -20,6 +20,7 @@ public class MessagesPresentr {
         App.getApi().getMessages(user_id).enqueue(new Callback<MessagesModel>() {
             @Override
             public void onResponse(Call<MessagesModel> call, Response<MessagesModel> response) {
+                mvp.stopProgressBar();
                 Log.e("send", "respons");
                 if(response.message().equals("OK")){
                     Log.e("send", "OK");
@@ -38,6 +39,7 @@ public class MessagesPresentr {
 
             @Override
             public void onFailure(Call<MessagesModel> call, Throwable t) {
+                mvp.stopProgressBar();
                 mvp.showError("Ошибка соеденения");
             }
         });

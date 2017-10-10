@@ -1,5 +1,6 @@
 package com.example.android.normalnotdagger.api;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -64,11 +65,23 @@ public class MessageServise extends Service  {
     }
 
     void show(String name, String text){
+
+        try {
+            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+            r.play();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_mail_outline_amber_500_24dp)
                         .setContentTitle(name)
                         .setContentText(text);
+        long[] vibrate = new long[] { 0, 2000};
+        Notification notification = mBuilder.build();
+        notification.vibrate = vibrate;
         Intent resultIntent = new Intent(this, MainActivity.class);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addParentStack(MainActivity.class);
@@ -78,10 +91,12 @@ public class MessageServise extends Service  {
                         0,
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
+
         mBuilder.setContentIntent(resultPendingIntent);
         NotificationManager mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(1, mBuilder.build());
+        mNotificationManager.notify(1, notification);
+
         count = new ArrayList<>();
     }
 
@@ -119,19 +134,14 @@ public class MessageServise extends Service  {
                                 for (int i = 0; i < response.body().getMessages().size(); i++) {
                                     if (count.get(i) != response.body().getMessages().get(i).getCount()) {
                                         if(!response.body().getMessages().get(i).getUserId().equals(user.getString("id","e"))) {
-                                            name = response.body().getMessages().get(i).getUserLogin();
-                                            text = response.body().getMessages().get(i).getUserMessages().get(response.body().getMessages().get(i).getUserMessages().size() - 1).getText();
+                                            if(!response.body().getMessages().get(i).getUserMessages().get(response.body().getMessages().get(i).getUserMessages().size()-1).getFromId().toString().equals(user.getString("id","e"))) {
+                                                name = response.body().getMessages().get(i).getUserLogin();
+                                                text = response.body().getMessages().get(i).getUserMessages().get(response.body().getMessages().get(i).getUserMessages().size() - 1).getText();
+                                            }
                                         }
                                     }
                                 }
-                                if( name != null && name != user.getString("id", "n")){
-                                    try {
-                                        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                                        Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-                                        r.play();
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
+                                if( name != null){
                                     show(name, text);
                                 }
                             }

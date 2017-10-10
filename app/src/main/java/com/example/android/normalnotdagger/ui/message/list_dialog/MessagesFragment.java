@@ -2,6 +2,7 @@ package com.example.android.normalnotdagger.ui.message.list_dialog;
 
 
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -21,12 +22,14 @@ import com.example.android.normalnotdagger.ui.message.dialog_item.DialogItemFrag
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class MessagesFragment extends Fragment implements MessagersMVP{
     List<Message> posts = new ArrayList<>();
     RecyclerView recyclerView;
     MessageAdapter messageAdapter;
     MessagesPresentr pr;
     SharedPreferences user;
+    ProgressDialog loading;
 
     @Nullable
     @Override
@@ -36,6 +39,11 @@ public class MessagesFragment extends Fragment implements MessagersMVP{
         user = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
         if(!user.getString("id","null").equals("null")) {
             pr = new MessagesPresentr(this);
+            loading = new ProgressDialog(getActivity());
+            loading.setMessage("Загрузка сообщений");
+            loading.setIndeterminate(true);
+            loading.setCancelable(false);
+            loading.show();
             pr.loadMessage(user.getString("id", "error"));
 
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -64,7 +72,7 @@ public class MessagesFragment extends Fragment implements MessagersMVP{
 
     @Override
     public void messagIsEmpty() {
-
+        Toast.makeText(getActivity(),"У вас нет ни одного диалога",Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -75,5 +83,11 @@ public class MessagesFragment extends Fragment implements MessagersMVP{
                 .replace(R.id.content, youFragment)
                 .addToBackStack("myStack")
                 .commit();
+    }
+
+    @Override
+    public void stopProgressBar() {
+        loading.dismiss();
+
     }
 }

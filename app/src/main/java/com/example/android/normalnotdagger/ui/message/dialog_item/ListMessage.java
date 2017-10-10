@@ -18,7 +18,7 @@ import com.example.android.normalnotdagger.ui.message.ListMessageSingleton;
 
 
 
-public class ListMessage extends Fragment {
+public class ListMessage extends Fragment implements SendMVP {
     RecyclerView recyclerView;
     SharedPreferences user;
     DialogAdapter adapter;
@@ -32,9 +32,10 @@ public class ListMessage extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(linearLayoutManager);
+        DialogPresentr pr = new DialogPresentr(this);
 
         Log.e("SIZE LIST", ListMessageSingleton.getInstance().getList().size() + "");
-        adapter = new DialogAdapter(ListMessageSingleton.getInstance().getList(),user.getString("id","error"));
+        adapter = new DialogAdapter(ListMessageSingleton.getInstance().getList(),user.getString("id","error"), pr);
         recyclerView.setAdapter(adapter);
 
         //скролл при открытии клавиатуры
@@ -58,5 +59,10 @@ public class ListMessage extends Fragment {
         }
        // recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
         return recyclerView;
+    }
+
+    @Override
+    public void stopProgressBar() {
+
     }
 }

@@ -21,12 +21,12 @@ import com.example.android.normalnotdagger.ui.message.ListMessageSingleton;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DialogItemFragment extends Fragment {
+public class DialogItemFragment extends Fragment implements SendMVP{
     @BindView(R.id.send_message)
     ImageView sendMessage;
     @BindView(R.id.text_message)
     TextView text;
-    DialogPresentr pr = new DialogPresentr();
+    DialogPresentr pr;
     SharedPreferences user;
     ProgressDialog loading;
 
@@ -35,8 +35,8 @@ public class DialogItemFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_fragment, container, false);
         ButterKnife.bind(this, view);
-
-        final ProgressDialog loading = new ProgressDialog(getActivity());
+        pr = new DialogPresentr(this);
+        loading = new ProgressDialog(getActivity());
         loading.setMessage("Отправка сообщения");
         loading.setIndeterminate(true);
         loading.setCancelable(false);
@@ -54,13 +54,12 @@ public class DialogItemFragment extends Fragment {
         sendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 if (text.getText().length() == 0) {
                     Toast.makeText(getActivity(), "Введите текст", Toast.LENGTH_SHORT).show();
                 } else {
                     loading.show();
                     pr.senrMessage(user.getString("id", "error"), ListMessageSingleton.getInstance().getId(), text.getText().toString().replace("\n\n", "").replace("  ", ""));
-                        loading.dismiss();
-
                     text.setText("");
 
                 }
@@ -71,4 +70,10 @@ public class DialogItemFragment extends Fragment {
     }
 
 
+    @Override
+    public void stopProgressBar() {
+        if(loading.isShowing()) {
+            loading.dismiss();
+        }
+    }
 }

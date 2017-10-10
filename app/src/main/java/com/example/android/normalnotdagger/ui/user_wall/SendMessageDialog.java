@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.android.normalnotdagger.R;
 import com.example.android.normalnotdagger.ui.message.dialog_item.DialogPresentr;
+import com.example.android.normalnotdagger.ui.message.dialog_item.SendMVP;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,7 +22,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 
-public class SendMessageDialog extends DialogFragment {
+public class SendMessageDialog extends DialogFragment implements SendMVP{
     @BindView(R.id.text)
     EditText text;
     @BindView(R.id.send)
@@ -38,6 +39,7 @@ public class SendMessageDialog extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.message_dialog, container, false);
         unbinder = ButterKnife.bind(this, view);
+        getDialog().setTitle("Сообщение");
         user = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -54,7 +56,7 @@ public class SendMessageDialog extends DialogFragment {
 
     @OnClick(R.id.send)
     public void onSendClicked() {
-        DialogPresentr presentr = new DialogPresentr();
+        DialogPresentr presentr = new DialogPresentr(this);
         if (text.getText().toString().length() > 0) {
             presentr.senrMessage(user.getString("id", "e"), id, text.getText().toString().replace("\n\n", "").replace("  ", ""));
             dismiss();
@@ -69,4 +71,8 @@ public class SendMessageDialog extends DialogFragment {
     }
 
 
+    @Override
+    public void stopProgressBar() {
+
+    }
 }

@@ -22,12 +22,14 @@ import butterknife.ButterKnife;
 
 public class DialogAdapter extends RecyclerView.Adapter<DialogAdapter.DialogViewHolder>{
     List<UserMessage> messages = new ArrayList<>();
-    DialogPresentr pr = new DialogPresentr();
+    DialogPresentr pr;
     String id;
 
-    DialogAdapter(List<UserMessage> messages, String id) {
+    DialogAdapter(List<UserMessage> messages, String id, DialogPresentr pr) {
         this.messages = messages;
         this.id = id;
+        this.pr =pr;
+
         Log.e("CREAD", "cread Adapter");
     }
 

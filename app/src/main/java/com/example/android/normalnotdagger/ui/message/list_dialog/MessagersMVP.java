@@ -10,4 +10,5 @@ public interface MessagersMVP {
     void showError(String error);
     void messagIsEmpty();
     void startDiolog();
+    void stopProgressBar();
 }
