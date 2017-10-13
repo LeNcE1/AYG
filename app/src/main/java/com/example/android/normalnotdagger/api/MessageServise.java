@@ -19,6 +19,7 @@ import android.util.Log;
 import com.example.android.normalnotdagger.MainActivity;
 import com.example.android.normalnotdagger.R;
 import com.example.android.normalnotdagger.models.new_model.messages.MessagesModel;
+import com.example.android.normalnotdagger.ui.message.list_dialog.ImessageFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,6 @@ public class MessageServise extends Service  {
 
 
     List<Integer> count = new ArrayList<>();
-    int mainCount = 0;
     private Timer mTimer;
     private MyTimer mMyTimer;
     SharedPreferences user;
@@ -74,15 +74,18 @@ public class MessageServise extends Service  {
             e.printStackTrace();
         }
 
+
+        long[] vibrate = new long[] { 0, 2000};
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_mail_outline_amber_500_24dp)
                         .setContentTitle(name)
-                        .setContentText(text);
-        long[] vibrate = new long[] { 0, 2000};
-        Notification notification = mBuilder.build();
-        notification.vibrate = vibrate;
+                        .setContentText(text)
+                        .setVibrate(vibrate)
+                        .setAutoCancel(true);
+
         Intent resultIntent = new Intent(this, MainActivity.class);
+        resultIntent.putExtra("push","1");
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addParentStack(MainActivity.class);
         stackBuilder.addNextIntent(resultIntent);
@@ -91,11 +94,13 @@ public class MessageServise extends Service  {
                         0,
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
-
         mBuilder.setContentIntent(resultPendingIntent);
         NotificationManager mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(1, notification);
+        mNotificationManager.notify(1, mBuilder.build());
+
+
+
 
         count = new ArrayList<>();
     }

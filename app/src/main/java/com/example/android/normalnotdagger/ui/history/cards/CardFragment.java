@@ -2,6 +2,7 @@ package com.example.android.normalnotdagger.ui.history.cards;
 
 
 import android.app.Fragment;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 import com.example.android.normalnotdagger.R;
 import com.example.android.normalnotdagger.models.new_model.categ_model.Card;
 import com.example.android.normalnotdagger.ui.history.ItemCard.ItemCardsFragment;
+
 
 import java.util.List;
 
@@ -29,9 +31,12 @@ public class CardFragment extends Fragment implements CardMVP{
                 R.layout.recycler_view, container, false);
         Bundle bundle = getArguments();
 
+
         if(bundle!=null){
             pr = new CardsPresentr(this);
-            adapter = new CardsAdapter(pr,bundle.getString("id"), this);
+
+            adapter = new CardsAdapter(pr,bundle.getString("id"), this, this.getActivity());
+
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             recyclerView.setAdapter(adapter);
             pr.getCars(bundle.getString("id"), 0);
@@ -70,4 +75,5 @@ public class CardFragment extends Fragment implements CardMVP{
                 .addToBackStack("myStack")
                 .commit();
     }
+
 }

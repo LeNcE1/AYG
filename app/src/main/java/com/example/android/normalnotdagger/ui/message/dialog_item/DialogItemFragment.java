@@ -50,18 +50,15 @@ public class DialogItemFragment extends Fragment implements SendMVP{
                 .addToBackStack("myStack")
                 .commit();
 
-
         sendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 if (text.getText().length() == 0) {
                     Toast.makeText(getActivity(), "Введите текст", Toast.LENGTH_SHORT).show();
                 } else {
                     loading.show();
-                    pr.senrMessage(user.getString("id", "error"), ListMessageSingleton.getInstance().getId(), text.getText().toString().replace("\n\n", "").replace("  ", ""));
+                    pr.senrMessage(user.getString("id", "error"), ListMessageSingleton.getInstance().getId(), text.getText().toString().replace("\n\n", "").replace("   ", "").replace("  "," "));
                     text.setText("");
-
                 }
             }
         });
@@ -74,6 +71,7 @@ public class DialogItemFragment extends Fragment implements SendMVP{
     public void stopProgressBar() {
         if(loading.isShowing()) {
             loading.dismiss();
+
         }
     }
 }

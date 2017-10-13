@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity
         startService(intent);
 
 
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -59,13 +60,23 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
 
-        InewsFragment youFragment = new InewsFragment();
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()          // получаем экземпляр FragmentTransaction
-                .replace(R.id.content, youFragment)
-                .addToBackStack("myStack")
-                .commit();
+        if(getIntent().getStringExtra("push")!= null){
+            ImessageFragment youFragment = new ImessageFragment();
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction()          // получаем экземпляр FragmentTransaction
+                    .replace(R.id.content, youFragment)
+                    .addToBackStack("myStack")
+                    .commit();
+        }
+        else {
+            InewsFragment youFragment = new InewsFragment();
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction()          // получаем экземпляр FragmentTransaction
+                    .replace(R.id.content, youFragment)
+                    .addToBackStack("myStack")
+                    .commit();
 
+        }
 
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);

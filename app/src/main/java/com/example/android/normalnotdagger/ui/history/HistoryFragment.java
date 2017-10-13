@@ -84,7 +84,7 @@ public class HistoryFragment extends Fragment implements HistoryMVP{
         Bundle bundle = new Bundle();
         bundle.putString("id", id+"");
         youFragment.setArguments(bundle);
-        android.app.FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()          // получаем экземпляр FragmentTransaction
                 .replace(R.id.news_list, youFragment)
                 .addToBackStack("myStack")

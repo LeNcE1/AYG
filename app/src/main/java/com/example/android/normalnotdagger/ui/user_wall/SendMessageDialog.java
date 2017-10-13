@@ -47,7 +47,6 @@ public class SendMessageDialog extends DialogFragment implements SendMVP{
         }
         return view;
     }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();

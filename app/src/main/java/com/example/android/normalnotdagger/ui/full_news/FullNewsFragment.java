@@ -13,11 +13,15 @@ import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import com.example.android.normalnotdagger.R;
 import com.example.android.normalnotdagger.models.new_model.news.News;
@@ -30,13 +34,13 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 public class FullNewsFragment extends Fragment implements NewsMVP {
@@ -62,13 +66,18 @@ public class FullNewsFragment extends Fragment implements NewsMVP {
     ImageView like;
     @BindView(R.id.deslike)
     ImageView deslike;
-    @BindView(R.id.gallery_imag1)
-    ImageView gallery_imag1;
-    @BindView(R.id.gallery_imag2)
-    ImageView gallery_imag2;
-    @BindView(R.id.gallery_imag3)
-    ImageView gallery_imag3;
+    @BindView(R.id.arrowBack)
+    ImageView arrowBack;
+    @BindView(R.id.viewFlipper)
+    ViewFlipper flipper;
+    @BindView(R.id.goneLayot)
+    LinearLayout goneLayot;
+    @BindView(R.id.imageLayout)
+    LinearLayout imageLayout;
+    @BindView(R.id.hos)
+    HorizontalScrollView hos;
 
+    private float fromPosition;
 
     List<String> getList(String mass) {
         List<String> rez = new ArrayList<>();
@@ -120,65 +129,74 @@ public class FullNewsFragment extends Fragment implements NewsMVP {
                 }
             }
 
+            int n = 0;
+
 
             imags = getList(bundle.getString("imags"));
-            Log.e("imags", imags.size() + "");
-            switch (imags.size()) {
-                case 0: {
-                    break;
-                }
-                case 1: {
-                    gallery_imag1.setVisibility(View.VISIBLE);
-                    Picasso.with(gallery_imag1.getContext()).load(("http://9834436605.myjino.ru/" + imags.get(0)).replace(" ", ""))
-                            //.placeholder(R.drawable.ic_camera_alt_black_24dp)
-                            .fit()
-                            .centerCrop()
-                            .into(gallery_imag1);
-                    break;
-                }
-                case 2: {
-                    gallery_imag1.setVisibility(View.VISIBLE);
-                    Log.e("imag", "1: " + "http://9834436605.myjino.ru/" + imags.get(0));
-                    Picasso.with(gallery_imag1.getContext()).load(("http://9834436605.myjino.ru/" + imags.get(0)).replace(" ", ""))
-                            //.placeholder(R.drawable.ic_camera_alt_black_24dp)
-                            .fit()
-                            .centerCrop()
-                            .into(gallery_imag1);
+            Log.e("Imags", imags + "_" + imags.get(0).isEmpty());
+            if (!imags.get(0).isEmpty()) {
+                Log.e("imags", imags.size() + "");
+                for (String s : imags) {
+                    final ImageView imageView = new ImageView(getActivity());
+                    ImageView imageView2 = new ImageView(getActivity());
+                    imageView.setPadding(0, 0, 16, 0);
+                    Picasso.with(getActivity()).load(("http://9834436605.myjino.ru/" + s).replace(" ", ""))
+                            .placeholder(R.drawable.ic_image_amber_500_24dp)
+                            .into(imageView);
+                    Picasso.with(getActivity()).load(("http://9834436605.myjino.ru/" + s).replace(" ", ""))
+                            .placeholder(R.drawable.ic_image_amber_500_24dp)
+                            .into(imageView2);
+                    LinearLayout.LayoutParams imageViewLayoutParams = new LinearLayout.LayoutParams(400, 300);
+                    imageView.setLayoutParams(imageViewLayoutParams);
+                    imageView.setTag(n);
+                    imageView.setClickable(true);
+                    final int finalN = n;
+                    imageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            goneLayot.setVisibility(View.VISIBLE);
+                            flipper.setDisplayedChild(finalN);
+                            Log.e("Click", "click" + view.getTag());
+                        }
+                    });
+                    n++;
 
-                    gallery_imag2.setVisibility(View.VISIBLE);
-                    Log.e("imag", "2: " + ("http://9834436605.myjino.ru/" + imags.get(1)).replace(" ", ""));
-                    Picasso.with(gallery_imag2.getContext()).load(("http://9834436605.myjino.ru/" + imags.get(1)).replace(" ", ""))
-                            //.placeholder(R.drawable.ic_camera_alt_black_24dp)
-                            .fit()
-                            .centerCrop()
-                            .into(gallery_imag2);
-                    break;
+                    imageLayout.addView(imageView);
+//            LinearLayout linearLayout = new LinearLayout(getActivity());
+//            linearLayout.addView(imageView);
+//            flipper.addView(inflater.inflate((XmlPullParser) linearLayout,goneLayot));
+
+
+                    flipper.addView(imageView2);
+
+                    //flipper.addView(imageView);
                 }
-                case 3: {
-                    Log.e("imag", "1: " + "http://9834436605.myjino.ru/" + imags.get(0));
-                    gallery_imag1.setVisibility(View.VISIBLE);
-                    Picasso.with(gallery_imag1.getContext()).load(("http://9834436605.myjino.ru/" + imags.get(0)).replace(" ", ""))
-                            //.placeholder(R.drawable.ic_camera_alt_black_24dp)
-                            .fit()
-                            .centerCrop()
-                            .into(gallery_imag1);
-                    Log.e("imag", "2: " + "http://9834436605.myjino.ru/" + imags.get(1));
-                    gallery_imag2.setVisibility(View.VISIBLE);
-                    Picasso.with(gallery_imag1.getContext()).load(("http://9834436605.myjino.ru/" + imags.get(1)).replace(" ", ""))
-                            //.placeholder(R.drawable.ic_camera_alt_black_24dp)
-                            .fit()
-                            .centerCrop()
-                            .into(gallery_imag2);
-                    Log.e("imag", "3: " + "http://9834436605.myjino.ru/" + imags.get(2));
-                    gallery_imag3.setVisibility(View.VISIBLE);
-                    Picasso.with(gallery_imag1.getContext()).load(("http://9834436605.myjino.ru/" + imags.get(2)).replace(" ", ""))
-                            //.placeholder(R.drawable.ic_camera_alt_black_24dp)
-                            .fit()
-                            .centerCrop()
-                            .into(gallery_imag3);
-                    break;
-                }
-            }
+                flipper.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View view, MotionEvent event) {
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_DOWN:
+                                fromPosition = event.getX();
+                                break;
+                            case MotionEvent.ACTION_UP:
+                                float toPosition = event.getX();
+                                if (fromPosition > toPosition) {
+                                    flipper.setInAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.go_next_in));
+                                    flipper.setOutAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.go_next_out));
+                                    flipper.showNext();
+                                } else if (fromPosition < toPosition) {
+                                    flipper.setInAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.go_prev_in));
+                                    flipper.setOutAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.go_prev_out));
+                                    flipper.showPrevious();
+                                }
+                            default:
+                                break;
+                        }
+                        return true;
+                    }
+                });
+            } else
+                hos.setVisibility(View.GONE);
             final NewsPresentr pr = new NewsPresentr(this, user);
             like.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -310,6 +328,12 @@ public class FullNewsFragment extends Fragment implements NewsMVP {
         return view;
     }
 
+    @OnClick(R.id.arrowBack)
+    public void onViewClicked() {
+        goneLayot.setVisibility(View.GONE);
+
+    }
+
     @Override
     public void showNews(List<News> posts) {
 
@@ -369,4 +393,7 @@ public class FullNewsFragment extends Fragment implements NewsMVP {
     public void startMyInfo() {
 
     }
+
+
+
 }

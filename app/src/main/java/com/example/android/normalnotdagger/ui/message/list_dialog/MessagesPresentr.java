@@ -34,7 +34,6 @@ public class MessagesPresentr {
                 else{
                     mvp.showError("Ошибка загрузки");
                 }
-
             }
 
             @Override

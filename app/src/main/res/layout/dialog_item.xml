@@ -58,10 +58,11 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
 
+                android:maxLines="1"
                 android:text="Текст"
                 android:textColor="@color/textSubtitle"
                 android:textSize="14dp"
-                android:maxLines="1" />
+                 />
 
             <TextView
                 android:id="@+id/date"

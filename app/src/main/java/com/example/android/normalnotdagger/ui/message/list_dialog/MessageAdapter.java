@@ -41,6 +41,9 @@ public class MessageAdapter extends  RecyclerView.Adapter<MessageAdapter.Message
         final Message message = messages.get(position);
         holder.date.setText(message.getUserMessages().get(message.getUserMessages().size()-1).getDate());
         holder.lastMessag.setText(message.getUserMessages().get(message.getUserMessages().size()-1).getText());
+        if(message.getUserMessages().get(message.getUserMessages().size()-1).getIsReaded()==0){
+            // TODO: 13.10.2017  
+        }
         holder.name.setText(message.getUserLogin());
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override

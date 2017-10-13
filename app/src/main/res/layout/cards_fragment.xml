@@ -2,10 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/white"
     android:gravity="top"
     android:orientation="vertical"
+    android:layout_marginBottom="8dp"
+    android:elevation="2dp"
     >
 
     <TextView
@@ -29,30 +31,15 @@
         android:layout_below="@+id/text"
         android:layout_marginLeft="32dp"
         android:layout_marginRight="32dp"
+        android:layout_marginBottom="16dp"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:hint="Текст"
         android:inputType="textMultiLine"
-
         android:textColor="@color/textSubtitle"
         android:textSize="14dp" />
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        android:orientation="vertical"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginRight="32dp"
-        android:id="@+id/images">
 
-        <com.veinhorn.scrollgalleryview.ScrollGalleryView
-            android:id="@+id/scroll_gallery_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
-
-    </LinearLayout>
 
 
 </LinearLayout>

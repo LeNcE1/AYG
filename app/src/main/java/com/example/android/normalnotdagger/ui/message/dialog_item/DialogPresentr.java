@@ -17,10 +17,12 @@ import retrofit2.Response;
 public class DialogPresentr {
 
     SendMVP mvp;
-   public DialogPresentr(SendMVP mvp){
+
+    public DialogPresentr(SendMVP mvp) {
         this.mvp = mvp;
     }
-    void addView(String id, String user_id){
+
+    void addView(String id, String user_id) {
         App.getApi().getView(id, user_id).enqueue(new Callback<StatusModel>() {
             @Override
             public void onResponse(Call<StatusModel> call, Response<StatusModel> response) {
@@ -33,31 +35,26 @@ public class DialogPresentr {
             }
         });
     }
-    boolean res=false;
-  public void senrMessage(String form_id, String to_id, String text){
 
-        Calendar calendar = Calendar.getInstance();
-        String dataMessage = calendar.getTime().toString();
+    public void senrMessage(String form_id, String to_id, String text) {
+
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String data = dateFormat.format(new Date());
         App.getApi().sendMessage(form_id, to_id, text, data).enqueue(new Callback<StatusModel>() {
             @Override
             public void onResponse(Call<StatusModel> call, Response<StatusModel> response) {
-                if(response.body().getStatus().equals("OK")){
+                if (response.body().getStatus().equals("OK")) {
                     mvp.stopProgressBar();
                     Log.e("messag", "send");
-
                 }
             }
 
             @Override
             public void onFailure(Call<StatusModel> call, Throwable t) {
                 Log.e("messag", "error");
-
-
             }
 
         });
-
     }
+
 }

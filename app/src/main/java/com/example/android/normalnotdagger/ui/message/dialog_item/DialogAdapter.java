@@ -37,11 +37,7 @@ public class DialogAdapter extends RecyclerView.Adapter<DialogAdapter.DialogView
 
     @Override
     public DialogViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        DialogViewHolder vh;
         View itemLayoutView  = LayoutInflater.from(parent.getContext()).inflate(R.layout.messag_item_right, parent, false);;
-
-        //загружаем разметку в зависимости от типа и возвращаем
-        //нужный холдер
         switch (viewType)
         {
             case 0:
@@ -78,7 +74,6 @@ public class DialogAdapter extends RecyclerView.Adapter<DialogAdapter.DialogView
         pr.addView(id, ListMessageSingleton.getInstance().getId());
         Log.e("message", "my ID:" + id + " Dialog id:" + message.getFromId() + " text:" + message.getText() + " read:" + message.getIsReaded());
         if (id.equals(message.getFromId().toString())) {
-
             if (message.getIsReaded() == 0) {
                 Log.e("isRead", "hi not read");
             } else {

@@ -3,6 +3,7 @@ package com.example.android.normalnotdagger.ui.history.cards;
 
 import com.example.android.normalnotdagger.models.new_model.categ_model.Card;
 
+
 import java.util.List;
 
 public interface CardMVP {
