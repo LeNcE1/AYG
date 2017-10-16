@@ -14,15 +14,16 @@
 
     >
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
+        android:id="@+id/dialog"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/dialog"
         android:layout_marginBottom="16dp"
-        android:layout_marginTop="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:orientation="horizontal">
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        android:weightSum="4">
 
         <ImageView
             android:id="@+id/avatar"
@@ -36,10 +37,14 @@
             />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="272dp"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="8dp"
+
+            android:layout_marginRight="8dp"
+            android:layout_toEndOf="@+id/avatar"
             android:orientation="vertical">
 
 
@@ -61,8 +66,7 @@
                 android:maxLines="1"
                 android:text="Текст"
                 android:textColor="@color/textSubtitle"
-                android:textSize="14dp"
-                 />
+                android:textSize="14dp" />
 
             <TextView
                 android:id="@+id/date"
@@ -75,9 +79,19 @@
                 android:textSize="12dp" />
         </LinearLayout>
 
+        <ImageView
+            android:id="@+id/dot"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginRight="8dp"
+            app:srcCompat="@drawable/ic_fiber_manual_record_amber_500_24dp" />
 
 
-
-    </LinearLayout>
+    </RelativeLayout>
 
 </android.support.v7.widget.CardView>

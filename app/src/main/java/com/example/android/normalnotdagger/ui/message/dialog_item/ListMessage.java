@@ -38,6 +38,14 @@ public class ListMessage extends Fragment implements SendMVP {
         adapter = new DialogAdapter(ListMessageSingleton.getInstance().getList(),user.getString("id","error"), pr);
         recyclerView.setAdapter(adapter);
 
+            recyclerView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    recyclerView.smoothScrollToPosition(
+                            recyclerView.getAdapter().getItemCount() - 1);
+                }
+            }, 100);
+
         //скролл при открытии клавиатуры
         if (Build.VERSION.SDK_INT >= 11) {
             recyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
@@ -63,6 +71,11 @@ public class ListMessage extends Fragment implements SendMVP {
 
     @Override
     public void stopProgressBar() {
+
+    }
+
+    @Override
+    public void restart() {
 
     }
 }

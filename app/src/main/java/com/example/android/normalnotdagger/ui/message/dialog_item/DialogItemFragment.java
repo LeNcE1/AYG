@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.normalnotdagger.R;
+import com.example.android.normalnotdagger.api.ServiseMenager;
 import com.example.android.normalnotdagger.ui.message.ListMessageSingleton;
 
 import butterknife.BindView;
@@ -40,13 +41,15 @@ public class DialogItemFragment extends Fragment implements SendMVP{
         loading.setMessage("Отправка сообщения");
         loading.setIndeterminate(true);
         loading.setCancelable(false);
+        ServiseMenager.getInstance().setMvpList(this);
+        ServiseMenager.getInstance().setMvp(null);
         user = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
         Log.e("name", ListMessageSingleton.getInstance().getName());
         getActivity().setTitle(ListMessageSingleton.getInstance().getName());
         ListMessage youFragment = new ListMessage();
         android.app.FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()          // получаем экземпляр FragmentTransaction
-                .add(R.id.message_list, youFragment)
+                .replace(R.id.message_list, youFragment)
                 .addToBackStack("myStack")
                 .commit();
 
@@ -71,7 +74,17 @@ public class DialogItemFragment extends Fragment implements SendMVP{
     public void stopProgressBar() {
         if(loading.isShowing()) {
             loading.dismiss();
-
         }
+    }
+
+    @Override
+    public void restart() {
+        ListMessageSingleton.getInstance().setList(ServiseMenager.getInstance().getDialog(ListMessageSingleton.getInstance().getId()));
+        ListMessage youFragment = new ListMessage();
+        android.app.FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()          // получаем экземпляр FragmentTransaction
+                .replace(R.id.message_list, youFragment)
+                .addToBackStack("myStack")
+                .commit();
     }
 }

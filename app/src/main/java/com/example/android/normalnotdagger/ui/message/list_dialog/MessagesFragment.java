@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.android.normalnotdagger.R;
+import com.example.android.normalnotdagger.api.ServiseMenager;
 import com.example.android.normalnotdagger.models.new_model.messages.Message;
 import com.example.android.normalnotdagger.ui.message.dialog_item.DialogItemFragment;
 
@@ -38,6 +39,8 @@ public class MessagesFragment extends Fragment implements MessagersMVP{
                 R.layout.recycler_view, container, false);
         user = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
         if(!user.getString("id","null").equals("null")) {
+            ServiseMenager.getInstance().setMvp(this);
+            ServiseMenager.getInstance().setMvpList(null);
             pr = new MessagesPresentr(this);
             loading = new ProgressDialog(getActivity());
             loading.setMessage("Загрузка сообщений");
@@ -61,7 +64,7 @@ public class MessagesFragment extends Fragment implements MessagersMVP{
     @Override
     public void creadDialogs(List<Message> list) {
         Log.e("mes", "OK");
-        messageAdapter = new MessageAdapter(list ,this);
+        messageAdapter = new MessageAdapter(list ,this, user);
         recyclerView.setAdapter(messageAdapter);
     }
 
@@ -89,5 +92,15 @@ public class MessagesFragment extends Fragment implements MessagersMVP{
     public void stopProgressBar() {
         loading.dismiss();
 
+    }
+
+    @Override
+    public void reset() {
+        MessagesFragment youFragment = new MessagesFragment();
+        android.app.FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()          // получаем экземпляр FragmentTransaction
+                .replace(R.id.news_list, youFragment)
+                .addToBackStack("myStack")
+                .commit();
     }
 }

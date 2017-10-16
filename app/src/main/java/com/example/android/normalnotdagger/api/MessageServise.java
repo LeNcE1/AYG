@@ -30,15 +30,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MessageServise extends Service  {
-
+public class MessageServise extends Service {
 
 
     List<Integer> count = new ArrayList<>();
     private Timer mTimer;
     private MyTimer mMyTimer;
     SharedPreferences user;
-    int ret = 0;
+    boolean message = false;
 
 
     @Nullable
@@ -53,7 +52,7 @@ public class MessageServise extends Service  {
         mMyTimer = new MyTimer();
         user = getSharedPreferences("user", Context.MODE_PRIVATE);
         mTimer.schedule(mMyTimer, 1000, 5 * 1000);
-        Log.e("servise","Служба запущена" + user.getString("id", "1"));
+        Log.e("servise", "Служба запущена" + user.getString("id", "1"));
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -61,10 +60,10 @@ public class MessageServise extends Service  {
     public void onDestroy() {
         super.onDestroy();
         mMyTimer.cancel();
-        Log.e("servise","Служба остановлена");
+        Log.e("servise", "Служба остановлена");
     }
 
-    void show(String name, String text){
+    void show(String name, String text) {
 
         try {
             Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -75,7 +74,7 @@ public class MessageServise extends Service  {
         }
 
 
-        long[] vibrate = new long[] { 0, 2000};
+        long[] vibrate = new long[]{0, 2000};
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_mail_outline_amber_500_24dp)
@@ -85,7 +84,7 @@ public class MessageServise extends Service  {
                         .setAutoCancel(true);
 
         Intent resultIntent = new Intent(this, MainActivity.class);
-        resultIntent.putExtra("push","1");
+        resultIntent.putExtra("push", "1");
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addParentStack(MainActivity.class);
         stackBuilder.addNextIntent(resultIntent);
@@ -98,69 +97,79 @@ public class MessageServise extends Service  {
         NotificationManager mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(1, mBuilder.build());
+        message = true;
 
-
-
-
-        count = new ArrayList<>();
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        Log.e("servise","Служба создана");
+        Log.e("servise", "Служба создана");
     }
+
     class MyTimer extends TimerTask {
         @Override
         public void run() {
-            if(!user.getString("id", "n").equals("n")) {
+            if (!user.getString("id", "n").equals("n")) {
                 Log.e("servise", "cread");
                 App.getApi().getMessages(user.getString("id", "0")).enqueue(new Callback<MessagesModel>() {
                     @Override
                     public void onResponse(Call<MessagesModel> call, Response<MessagesModel> response) {
-                        int counts = 0;
                         if (count.isEmpty()) {
+                            Log.e("TEST", " First time");
                             for (int i = 0; i < response.body().getMessages().size(); i++) {
                                 count.add(response.body().getMessages().get(i).getCount());
                             }
-                            Log.e("servise", "one Recqest");
-                            Log.e("servise", "count diolog:"+count.size());
                         } else {
-                            if (count.size() != response.body().getMessages().size()) {
-
-                                Log.e("servise", "new Dialog");
-                                ret = 1;
-                                show(response.body().getMessages().get(response.body().getMessages().size()-1).getUserLogin(),
-                                        response.body().getMessages().get(response.body().getMessages().size()-1).getUserMessages().get(response.body().getMessages().get(response.body().getMessages().size()-1).getUserMessages().size()-1).getText());;
+                            if (count.size() < response.body().getMessages().size()) {
+                                Log.e("TEST", "New dialog");
+                                //new dialog
+                                show(response.body().getMessages().get(response.body().getMessages().size() - 1).getUserLogin()
+                                        , response.body().getMessages().get(response.body().getMessages().size() - 1).getUserMessages().get(response.body().getMessages().get(response.body().getMessages().size() - 1).getUserMessages().size() - 1).getText());
                             } else {
-                                String name = null;
-                                String text = null;
                                 for (int i = 0; i < response.body().getMessages().size(); i++) {
-                                    if (count.get(i) != response.body().getMessages().get(i).getCount()) {
-                                        if(!response.body().getMessages().get(i).getUserId().equals(user.getString("id","e"))) {
-                                            if(!response.body().getMessages().get(i).getUserMessages().get(response.body().getMessages().get(i).getUserMessages().size()-1).getFromId().toString().equals(user.getString("id","e"))) {
-                                                name = response.body().getMessages().get(i).getUserLogin();
-                                                text = response.body().getMessages().get(i).getUserMessages().get(response.body().getMessages().get(i).getUserMessages().size() - 1).getText();
-                                            }
+                                    if (count.get(i) < response.body().getMessages().get(i).getCount()) {
+                                        // new message
+                                        Log.e("TEST", "New message");
+                                        if (!response.body().getMessages().get(i).getUserMessages().get(response.body().getMessages().get(i).getUserMessages().size() - 1).getFromId().toString().equals(user.getString("id", "e"))) {
+                                            ServiseMenager.getInstance().setNewMessag(true);
+                                            ServiseMenager.getInstance().setList(response.body().getMessages());
+                                            ServiseMenager.getInstance().startReplas();
+                                            ServiseMenager.getInstance().startReplasDialog();
+                                            show(response.body().getMessages().get(i).getUserLogin()
+                                                    , response.body().getMessages().get(i).getUserMessages().get(response.body().getMessages().get(i).getUserMessages().size() - 1).getText());
                                         }
+                                        else{
+                                            ServiseMenager.getInstance().setNewMessag(true);
+                                            ServiseMenager.getInstance().setList(response.body().getMessages());
+                                            ServiseMenager.getInstance().startReplas();
+                                            ServiseMenager.getInstance().startReplasDialog();
+                                            message = true;
+                                            Log.e("TEST", "New my message");
+                                        }
+                                    } else {
+                                        Log.e("TEST", "not new message");
                                     }
                                 }
-                                if( name != null){
-                                    show(name, text);
-                                }
+
                             }
                         }
+                        if(message){
+                            count = new ArrayList<Integer>();
+                            message = false;
+                        }
                     }
+
                     @Override
                     public void onFailure(Call<MessagesModel> call, Throwable t) {
                         Log.e("servise", "not conect");
                     }
                 });
-            }
-            else{
+            } else {
                 Log.e("servise", "nou USER");
             }
         }
     }
+
 }

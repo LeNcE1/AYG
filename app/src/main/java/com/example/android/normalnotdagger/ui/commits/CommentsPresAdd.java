@@ -25,8 +25,6 @@ public class CommentsPresAdd {
     }
     void addComment(String text, String post_id){
         mvp.startProgresBar();
-        Calendar calendar = Calendar.getInstance();
-        String dataMessage = calendar.getTime().toString();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String data = dateFormat.format(new Date());
         App.getApi().getComment(post_id,user.getString("id","eeeeerr"),text,data).enqueue(new Callback<StatusModel>() {

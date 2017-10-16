@@ -194,5 +194,18 @@ public class NewsFragment extends Fragment implements NewsMVP{
                 .commit();
     }
 
+    @Override
+    public void replase() {
+        NewsFragment youFragment = new NewsFragment();
+        Bundle bundle1 = new Bundle();
+        bundle1.putString("my", "123");
+        youFragment.setArguments(bundle1);
+        android.app.FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()          // получаем экземпляр FragmentTransaction
+                .replace(R.id.news_list, youFragment)
+                .addToBackStack("myStack")
+                .commit();
+    }
+
 
 }

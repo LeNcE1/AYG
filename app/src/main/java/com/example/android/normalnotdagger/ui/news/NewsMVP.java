@@ -18,4 +18,5 @@ public interface NewsMVP {
     void showDeletePost(String status);
     void startFullNews(News news);
     void startMyInfo();
+    void replase();
 }

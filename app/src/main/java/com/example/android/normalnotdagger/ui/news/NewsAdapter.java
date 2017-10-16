@@ -80,8 +80,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.RibotViewHolde
                 holder.delete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
                         pr.deletePost(mRibots.get(position).getPostId());
+                        pr.replase();
 
                     }
                 });

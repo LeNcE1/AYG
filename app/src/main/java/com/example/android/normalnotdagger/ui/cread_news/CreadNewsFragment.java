@@ -196,7 +196,16 @@ public class CreadNewsFragment extends Fragment implements CreadNewsMVP {
 
     @Override
     public void showStatus(String status) {
-
+        if(status.equals("Пост успешно опубликован")){
+            text.setText("");
+            title.setText("");
+            shorts.setText("");
+            imags = new ArrayList<>();
+            imageView1.setVisibility(View.INVISIBLE);
+            imageView2.setVisibility(View.INVISIBLE);
+            imageView3.setVisibility(View.INVISIBLE);
+            addImag.setVisibility(View.VISIBLE);
+        }
         Toast.makeText(getActivity(), status, Toast.LENGTH_SHORT).show();
     }
 

@@ -40,7 +40,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
     @Override
     public void onBindViewHolder(final HistoryViewHolder holder, int position) {
         final Category category = categories.get(position);
-        holder.name.setText(category.getTitle()+" " +category.getId());
+        holder.name.setText(category.getTitle());
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

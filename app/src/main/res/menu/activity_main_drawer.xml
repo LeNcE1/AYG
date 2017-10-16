@@ -26,11 +26,11 @@
         <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_map_amber_500_24dp"
-            android:title="Map" />
+            android:title="Карта" />
         <item
             android:id="@+id/nav_history"
             android:icon="@drawable/ic_account_balance_amber_500_24dp"
-            android:title="Историческая спрвка" />
+            android:title="Историческая справка" />
 
     </group>
 

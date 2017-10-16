@@ -32,6 +32,7 @@ public class ICommentsFragment extends Fragment implements CommentsMVPadd{
     ImageView addComment;
     @BindView(R.id.textComment)
     EditText text;
+    String id;
 
     @Nullable
     @Override
@@ -46,6 +47,7 @@ public class ICommentsFragment extends Fragment implements CommentsMVPadd{
             Toast.makeText(getActivity(),"Публикация не найдена I", Toast.LENGTH_LONG).show();
         }
         else{
+            id = bundle.getString("post_id");
             CommentFragment youFragment = new CommentFragment();
             Bundle bundle1 = new Bundle();
             Log.e("testB", "post_id" + bundle.getString("post_id"));
@@ -53,7 +55,7 @@ public class ICommentsFragment extends Fragment implements CommentsMVPadd{
             youFragment.setArguments(bundle1);
             android.app.FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction()          // получаем экземпляр FragmentTransaction
-                    .add(R.id.comment_list, youFragment)
+                    .replace(R.id.comment_list, youFragment)
                     .addToBackStack("myStack")
                     .commit();
         }
@@ -67,9 +69,10 @@ public class ICommentsFragment extends Fragment implements CommentsMVPadd{
                     if(!user.getString("id", "n").equals("n")) {
                         Log.e("Text do", text.getText().toString());
                         String t = text.getText().toString().replace("\n\n", "");
-                        String t1 = t.replace("  ", "");
+                        String t1 = t.replace("   ", "").replace("  ", " ");
                         Log.e("Text posle", t1);
                         presentr.addComment(t1, bundle.getString("post_id"));
+                        text.setText("");
                     }
                     else{
                         Toast.makeText(getActivity(),"Авторезируйтесь", Toast.LENGTH_LONG).show();
@@ -94,12 +97,26 @@ public class ICommentsFragment extends Fragment implements CommentsMVPadd{
     @Override
     public void stopProgresBar() {
 
+
     }
 
     @Override
     public void showStatus(String status) {
-
-        Toast.makeText(getActivity(), status, Toast.LENGTH_SHORT).show();
+        if(status.equals("OK")){
+            CommentFragment youFragment = new CommentFragment();
+            Bundle bundle1 = new Bundle();
+            bundle1.putString("post_id", id);
+            youFragment.setArguments(bundle1);
+            android.app.FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction()          // получаем экземпляр FragmentTransaction
+                    .replace(R.id.comment_list, youFragment)
+                    .addToBackStack("myStack")
+                    .commit();
+            //Toast.makeText(getActivity(), "Коментарий у", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Toast.makeText(getActivity(), status, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

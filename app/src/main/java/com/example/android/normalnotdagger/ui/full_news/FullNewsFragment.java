@@ -394,6 +394,10 @@ public class FullNewsFragment extends Fragment implements NewsMVP {
 
     }
 
+    @Override
+    public void replase() {
+
+    }
 
 
 }

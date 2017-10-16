@@ -74,4 +74,9 @@ public class SendMessageDialog extends DialogFragment implements SendMVP{
     public void stopProgressBar() {
 
     }
+
+    @Override
+    public void restart() {
+
+    }
 }

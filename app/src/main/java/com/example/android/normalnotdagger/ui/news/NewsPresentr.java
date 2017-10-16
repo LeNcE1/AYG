@@ -24,6 +24,10 @@ public class NewsPresentr {
         this.mvp = mvp;
     }
 
+    public void replase(){
+        mvp.replase();
+    }
+
     public void loadNews(String user_id, int offset) {
         mvp.startProgresBar();
         Log.e("CONECT", "loadNews");

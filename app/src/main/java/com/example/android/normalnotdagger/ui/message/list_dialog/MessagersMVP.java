@@ -11,4 +11,5 @@ public interface MessagersMVP {
     void messagIsEmpty();
     void startDiolog();
     void stopProgressBar();
+    void reset();
 }
