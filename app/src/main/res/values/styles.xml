@@ -19,6 +19,7 @@
         <item name="android:textColorSecondary">@color/textSubtitle</item>
         <item name="android:textColorPrimaryInverse">@color/textHead</item>
         <item name="android:textColorSecondaryInverse">@color/primary</item>
+        
 
     </style>
 

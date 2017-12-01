@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,10 +25,10 @@ import com.example.android.normalnotdagger.ui.user_wall.UserWallFragment;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 
 public class NewsFragment extends Fragment implements NewsMVP{
+    private static final String LAYOUT_MANAGER_KEY = "news_state";
     List<News> posts = new ArrayList<>();
     RecyclerView recyclerView;
     NewsAdapter newsAdapter;
@@ -36,20 +37,28 @@ public class NewsFragment extends Fragment implements NewsMVP{
     String pod = null;
     String m = null;
     ProgressDialog loading;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+
         recyclerView = (RecyclerView) inflater.inflate(
                 R.layout.recycler_view, container, false);
+        pr = new NewsPresentr(this, user);
 
+        Bundle bundle = getArguments();
         loading = new ProgressDialog(getActivity());
         loading.setMessage("Загрузка новостей");
         loading.setIndeterminate(true);
         loading.setCancelable(false);
         user = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
-        pr = new NewsPresentr(this, user);
 
-        Bundle bundle = getArguments();
         if(bundle != null){
             Log.e("Bundle", "not NULL");
             pod = bundle.getString("pod");
@@ -76,11 +85,52 @@ public class NewsFragment extends Fragment implements NewsMVP{
                 Toast.makeText(getActivity(), "Авторезуйтесь", Toast.LENGTH_SHORT).show();
             }
         }
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        LinearLayoutManager manager =new LinearLayoutManager(getActivity());
+
+        recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(newsAdapter);
         newsAdapter = new NewsAdapter(posts, pr, user, pod, m);
         recyclerView.setAdapter(newsAdapter);
         return recyclerView;
+    }
+
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+
+        if(savedInstanceState != null)
+        {
+            Parcelable savedRecyclerLayoutState = savedInstanceState.getParcelable(LAYOUT_MANAGER_KEY);
+            recyclerView.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(LAYOUT_MANAGER_KEY, recyclerView.getLayoutManager().onSaveInstanceState());
     }
 
     @Override

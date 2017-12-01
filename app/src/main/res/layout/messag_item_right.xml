@@ -1,53 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-
-    >
-<LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:maxWidth="200dp"
-    android:id="@+id/dialog"
     android:gravity="right"
-    android:background="@drawable/chat_right"
-    android:orientation="vertical"
-    android:weightSum="3"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
-    android:layout_marginTop="24dp"
-    android:layout_alignParentRight="true">
+    android:layout_gravity="right"
+    >
+
+    <LinearLayout
+        android:id="@+id/dialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/chat_right"
+        android:gravity="right"
+        android:maxWidth="300dp"
+        android:orientation="vertical"
+        android:weightSum="3">
+
         <TextView
-            android:id="@+id/text_messag"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:maxWidth="200dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:layout_weight="2"
-            android:gravity="left"
-            android:text="last message"
-            android:textColor="@color/textHead" />
+            android:gravity="right"
+            android:text="Autor"
+            android:textColor="@color/textHead"
+            android:textSize="18dp" />
 
         <TextView
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_weight="2"
-            android:gravity="center"
             android:text="data"
-            android:textColor="@color/textLabel"
-            android:layout_marginBottom="16dp"/>
+            android:textColor="@color/textLabel" />
+
+        <TextView
+            android:id="@+id/text_messag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="2"
+            android:gravity="left"
+            android:maxWidth="300dp"
+            android:text="last message"
+            android:textColor="@color/textHead"
+            android:textSize="16dp" />
 
     </LinearLayout>
-</RelativeLayout>
+
+    <ImageView
+        android:id="@+id/avatar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="-4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="8dp"
+        android:src="@drawable/ic_account_circle_amber_500_24dp" />
+</LinearLayout>
 
 
 

@@ -54,6 +54,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.RibotViewHolde
         return new RibotViewHolder(itemView);
     }
 
+
+
     int doposition = 0;
     @Override
     public void onBindViewHolder(final RibotViewHolder holder, final int position) {
