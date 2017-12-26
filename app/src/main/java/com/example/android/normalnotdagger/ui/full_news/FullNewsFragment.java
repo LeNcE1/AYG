@@ -1,5 +1,6 @@
 package com.example.android.normalnotdagger.ui.full_news;
 
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
@@ -95,6 +96,7 @@ public class FullNewsFragment extends Fragment implements NewsMVP {
         return rez;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -141,10 +143,8 @@ public class FullNewsFragment extends Fragment implements NewsMVP {
                     ImageView imageView2 = new ImageView(getActivity());
                     imageView.setPadding(0, 0, 16, 0);
                     Picasso.with(getActivity()).load(("http://9834436605.myjino.ru/" + s).replace(" ", ""))
-                            .placeholder(R.drawable.ic_image_amber_500_24dp)
                             .into(imageView);
                     Picasso.with(getActivity()).load(("http://9834436605.myjino.ru/" + s).replace(" ", ""))
-                            .placeholder(R.drawable.ic_image_amber_500_24dp)
                             .into(imageView2);
                     LinearLayout.LayoutParams imageViewLayoutParams = new LinearLayout.LayoutParams(400, 300);
                     imageView.setLayoutParams(imageViewLayoutParams);

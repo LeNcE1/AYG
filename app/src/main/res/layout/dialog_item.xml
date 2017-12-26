@@ -31,7 +31,7 @@
             android:layout_height="50dp"
             android:layout_gravity="top"
 
-            android:src="@drawable/ic_account_circle_amber_500_24dp"
+            app:srcCompat="@drawable/ic_account_circle_amber_500_24dp"
 
 
             />

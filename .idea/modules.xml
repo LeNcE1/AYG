@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/NormalNotDagger-master.iml" filepath="$PROJECT_DIR$/NormalNotDagger-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/AYG.iml" filepath="$PROJECT_DIR$/.idea/AYG.iml" />
+      <module fileurl="file://D:\Android Projects\AYG\NormalNotDagger-master.iml" filepath="D:\Android Projects\AYG\NormalNotDagger-master.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
