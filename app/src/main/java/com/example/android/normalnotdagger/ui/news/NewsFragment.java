@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class NewsFragment extends Fragment implements NewsMVP{
+public class NewsFragment extends Fragment implements NewsMVP {
     private static final String LAYOUT_MANAGER_KEY = "news_state";
     List<News> posts = new ArrayList<>();
     RecyclerView recyclerView;
@@ -37,6 +37,7 @@ public class NewsFragment extends Fragment implements NewsMVP{
     String pod = null;
     String m = null;
     ProgressDialog loading;
+    Parcelable mLayoutManagerState;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,57 +49,62 @@ public class NewsFragment extends Fragment implements NewsMVP{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
+
+        super.onCreateView(inflater, container, savedInstanceState);
         recyclerView = (RecyclerView) inflater.inflate(
                 R.layout.recycler_view, container, false);
         pr = new NewsPresentr(this, user);
 
         Bundle bundle = getArguments();
+
         loading = new ProgressDialog(getActivity());
         loading.setMessage("Загрузка новостей");
         loading.setIndeterminate(true);
         loading.setCancelable(false);
         user = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
 
-        if(bundle != null){
+        if (bundle != null) {
             Log.e("Bundle", "not NULL");
             pod = bundle.getString("pod");
             m = bundle.getString("my");
-            if(m != null){
+            if (m != null) {
                 recyclerView.setAdapter(newsAdapter);
                 newsAdapter = new NewsAdapter(posts, pr, user, pod, m);
                 recyclerView.setAdapter(newsAdapter);
-                pr.loadNewsMy(user.getString("id","error"),0);
+                pr.loadNewsMy(user.getString("id", "error"), 0);
             }
         }
-        if(pod == null) {
-            if(m == null) {
+        if (pod == null) {
+            if (m == null) {
                 Log.e("pod", "NULL");
                 pr.loadNews(user.getString("id", "1"), 0);
             }
-        }
-        else{
-            if(!user.getString("id","n").equals("n")) {
+        } else {
+            if (!user.getString("id", "n").equals("n")) {
                 Log.e("pod", " not NULL" + bundle.getString("pod"));
                 pr.loadNewspod(user.getString("id", "1"), 0);
-            }
-            else{
+            } else {
                 Toast.makeText(getActivity(), "Авторезуйтесь", Toast.LENGTH_SHORT).show();
             }
         }
-        LinearLayoutManager manager =new LinearLayoutManager(getActivity());
 
+
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(newsAdapter);
         newsAdapter = new NewsAdapter(posts, pr, user, pod, m);
         recyclerView.setAdapter(newsAdapter);
-        return recyclerView;
-    }
 
+        return recyclerView;
+
+    }
 
 
     @Override
     public void onResume() {
         super.onResume();
+
+
     }
 
     @Override
@@ -117,20 +123,37 @@ public class NewsFragment extends Fragment implements NewsMVP{
     }
 
     @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-
-        if(savedInstanceState != null)
-        {
-            Parcelable savedRecyclerLayoutState = savedInstanceState.getParcelable(LAYOUT_MANAGER_KEY);
-            recyclerView.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
-        }
+    public void onDetach() {
+        super.onDetach();
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable(LAYOUT_MANAGER_KEY, recyclerView.getLayoutManager().onSaveInstanceState());
+    public void onAttachFragment(Fragment childFragment) {
+        super.onAttachFragment(childFragment);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            Parcelable savedRecyclerLayoutState = savedInstanceState.getParcelable(LAYOUT_MANAGER_KEY);
+            recyclerView.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
+        }
+
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle state) {
+        super.onSaveInstanceState(state);
+
+        state.putParcelable(LAYOUT_MANAGER_KEY, recyclerView.getLayoutManager().onSaveInstanceState());
+
     }
 
     @Override
@@ -152,12 +175,12 @@ public class NewsFragment extends Fragment implements NewsMVP{
 
     @Override
     public void addLike() {
-       // Toast.makeText(getActivity(), "Add like", Toast.LENGTH_SHORT).show();
+        // Toast.makeText(getActivity(), "Add like", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void addLikeError(String res) {
-        Toast.makeText(getActivity(), res,Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), res, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -213,14 +236,14 @@ public class NewsFragment extends Fragment implements NewsMVP{
         bundle.putString("short", post.getShort());
         bundle.putString("text", post.getText());
         bundle.putString("data", post.getDate());
-        bundle.putString("avtor", post.getUserId()==0?"Администратор":post.getUserLogin());
-        Log.e("News", "avtor "+post.getUserId());
+        bundle.putString("avtor", post.getUserId() == 0 ? "Администратор" : post.getUserLogin());
+        Log.e("News", "avtor " + post.getUserId());
         bundle.putString("avtor_id", post.getUserId().toString());
         bundle.putString("view", post.getViews());
         bundle.putString("reyting", post.getMark().toString());
-        bundle.putString("like",post.getUserMark().toString());
+        bundle.putString("like", post.getUserMark().toString());
         List<String> imags = new ArrayList<>();
-        for(int i = 0; i < post.getImages().size(); i++ ){
+        for (int i = 0; i < post.getImages().size(); i++) {
             imags.add(post.getImages().get(i).toString());
         }
         bundle.putString("imags", imags.toString());
