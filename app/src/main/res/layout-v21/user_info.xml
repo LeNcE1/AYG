@@ -72,12 +72,22 @@
                     android:id="@+id/tel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
                     android:drawableLeft="@drawable/ic_phone_black_24dp"
                     android:gravity="center_vertical"
                     android:text="Телефон"
                     android:textColor="@color/textHead"
                     android:textSize="14dp" />
 
+                <TextView
+                    android:id="@+id/date_roj"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_date_range_black_24dp"
+                    android:gravity="center_vertical"
+                    android:text="Дата рождения"
+                    android:textColor="@color/textHead"
+                    android:textSize="14dp" />
 
             </LinearLayout>
 

@@ -46,6 +46,7 @@ public interface UmoriliApi {
     Call<StatusModel> addView(@Query("id") String id,
                               @Query("post_id") String post_id);            //установка просмотра
 
+    // TODO: 27.12.2017 исправить поля 
     @GET("/api/sign-up")
     Call<RegistModel> getRegist(@Query("login") String login,
                                 @Query("pass") String pass,

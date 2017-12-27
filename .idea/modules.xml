@@ -3,8 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/AYG.iml" filepath="$PROJECT_DIR$/.idea/AYG.iml" />
+      <module fileurl="file://D:\Android\AndroidProject\AYG\.idea\AYG.iml" filepath="D:\Android\AndroidProject\AYG\.idea\AYG.iml" />
       <module fileurl="file://D:\Android Projects\AYG\NormalNotDagger-master.iml" filepath="D:\Android Projects\AYG\NormalNotDagger-master.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://D:\Android\AndroidProject\AYG\app\app.iml" filepath="D:\Android\AndroidProject\AYG\app\app.iml" />
     </modules>
   </component>
 </project>

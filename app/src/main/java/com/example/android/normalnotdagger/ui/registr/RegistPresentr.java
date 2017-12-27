@@ -20,9 +20,9 @@ public class RegistPresentr {
         this.user = user;
     }
 
-    void loadRegist(String login, String pass, String name, String family, String city, String tel){
+    void loadRegist(String login, String pass, String city, String tel){
         mvp.startProgresBar();
-        App.getApi().getRegist(login, pass, name, family, city,tel).enqueue(new Callback<RegistModel>() {
+        App.getApi().getRegist(login, pass, city,tel).enqueue(new Callback<RegistModel>() {
             @Override
             public void onResponse(Call<RegistModel> call, Response<RegistModel> response) {
                 Log.e("regist", response.body().getStatus()+" "+response.body().getId());

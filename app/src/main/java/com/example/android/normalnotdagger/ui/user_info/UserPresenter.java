@@ -28,7 +28,9 @@ public class UserPresenter {
                         response.body().getFamily(),
                         response.body().getCity(),
                         response.body().getTel(),
-                        response.body().getSubNum());
+                        response.body().getSubNum(),
+                        // TODO: 27.12.2017 добавить дату рождения и исправить getName
+                        );
                 mvp.stopProgresBar();
             }
 
